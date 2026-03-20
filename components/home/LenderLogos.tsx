@@ -1,23 +1,24 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 const lenders = [
-  { name: "Commonwealth Bank", color: "#FFD100", textColor: "#000000", bg: "#FFD100" },
-  { name: "Westpac", color: "#D5002B", textColor: "#FFFFFF", bg: "#D5002B" },
-  { name: "ANZ", color: "#003D6A", textColor: "#FFFFFF", bg: "#003D6A" },
-  { name: "NAB", color: "#C20000", textColor: "#FFFFFF", bg: "#C20000" },
-  { name: "Macquarie", color: "#000000", textColor: "#FFFFFF", bg: "#000000" },
-  { name: "ING", color: "#FF6200", textColor: "#FFFFFF", bg: "#FF6200" },
-  { name: "St.George", color: "#00703C", textColor: "#FFFFFF", bg: "#00703C" },
-  { name: "Suncorp", color: "#004B8D", textColor: "#FFFFFF", bg: "#004B8D" },
-  { name: "Bank of Melbourne", color: "#5B0078", textColor: "#FFFFFF", bg: "#5B0078" },
-  { name: "Bendigo Bank", color: "#B2003C", textColor: "#FFFFFF", bg: "#B2003C" },
+  { name: "Commonwealth Bank", logo: "/images/lenders/commonwealth-bank.png" },
+  { name: "Westpac", logo: "/images/lenders/westpac.png" },
+  { name: "ANZ", logo: "/images/lenders/anz.png" },
+  { name: "NAB", logo: "/images/lenders/nab.png" },
+  { name: "Macquarie", logo: "/images/lenders/macquarie.png" },
+  { name: "ING", logo: "/images/lenders/ing.png" },
+  { name: "St.George", logo: "/images/lenders/st-george.png" },
+  { name: "Suncorp", logo: "/images/lenders/suncorp.png" },
+  { name: "Bank of Melbourne", logo: "/images/lenders/bank-of-melbourne.png" },
+  { name: "Bendigo Bank", logo: "/images/lenders/bendigo-bank.png" },
 ];
 
 export default function LenderLogos() {
   return (
-    <section className="py-14 px-6 bg-marble-200 border-y border-marble-300 overflow-hidden">
+    <section className="py-14 px-6 bg-white border-y border-marble-300 overflow-hidden">
       <div className="max-w-7xl mx-auto">
         <motion.p
           initial={{ opacity: 0 }}
@@ -30,33 +31,36 @@ export default function LenderLogos() {
 
         <div className="relative">
           {/* Fade edges */}
-          <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-marble-200 to-transparent z-10" />
-          <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-marble-200 to-transparent z-10" />
+          <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-white to-transparent z-10" />
+          <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-white to-transparent z-10" />
 
           {/* Scrolling logos */}
-          <div className="flex gap-8 overflow-hidden">
+          <div className="flex gap-0 overflow-hidden">
             <motion.div
               animate={{ x: ["0%", "-50%"] }}
               transition={{
-                duration: 20,
+                duration: 25,
                 repeat: Infinity,
                 ease: "linear",
               }}
-              className="flex gap-8 items-center flex-shrink-0"
+              className="flex gap-0 items-center flex-shrink-0"
             >
               {[...lenders, ...lenders].map((lender, i) => (
                 <div
                   key={i}
-                  className="flex-shrink-0 px-6 py-3 border transition-all duration-300 hover:scale-105"
-                  style={{
-                    backgroundColor: lender.bg,
-                    borderColor: lender.bg,
-                  }}
+                  className="flex-shrink-0 flex flex-col items-center justify-center px-8 py-4 mx-2 bg-white border border-marble-200 hover:border-gold/30 hover:shadow-gold transition-all duration-300 rounded-sm"
+                  style={{ width: 160, height: 100 }}
                 >
-                  <span
-                    className="font-playfair text-sm font-semibold whitespace-nowrap tracking-wide"
-                    style={{ color: lender.textColor }}
-                  >
+                  <div className="relative w-full h-12 flex items-center justify-center">
+                    <Image
+                      src={lender.logo}
+                      alt={lender.name}
+                      width={120}
+                      height={48}
+                      className="object-contain max-h-12 w-auto"
+                    />
+                  </div>
+                  <span className="font-inter text-[10px] text-charcoal/40 mt-2 whitespace-nowrap tracking-wide">
                     {lender.name}
                   </span>
                 </div>
