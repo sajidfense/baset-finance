@@ -12,7 +12,7 @@ const trustItems = [
   },
   {
     icon: <Shield size={24} />,
-    value: "25+",
+    value: "40+",
     label: "Lender Panel",
     description: "Access to major banks and specialist lenders",
   },

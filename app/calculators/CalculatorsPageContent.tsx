@@ -1,0 +1,588 @@
+"use client";
+
+import { useState, useMemo } from "react";
+import { motion } from "framer-motion";
+import Link from "next/link";
+import PageHero from "@/components/PageHero";
+import CTABanner from "@/components/CTABanner";
+import { Calculator, DollarSign, Home, RefreshCw, ArrowRight, Info } from "lucide-react";
+
+type CalcTab = "borrowing" | "repayment" | "purchase" | "refinance";
+type Frequency = "monthly" | "fortnightly" | "weekly";
+
+function formatCurrency(value: number): string {
+  return new Intl.NumberFormat("en-AU", {
+    style: "currency",
+    currency: "AUD",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(value);
+}
+
+function formatCurrencyDecimal(value: number): string {
+  return new Intl.NumberFormat("en-AU", {
+    style: "currency",
+    currency: "AUD",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(value);
+}
+
+// ─── Borrowing Capacity ───
+interface BorrowingInputs {
+  annualIncome: string;
+  partnerIncome: string;
+  livingExpenses: string;
+  existingLoans: string;
+  creditCards: string;
+  interestRate: string;
+  loanTerm: string;
+}
+
+const defaultBorrowing: BorrowingInputs = {
+  annualIncome: "",
+  partnerIncome: "",
+  livingExpenses: "2500",
+  existingLoans: "0",
+  creditCards: "0",
+  interestRate: "6.50",
+  loanTerm: "30",
+};
+
+function calcBorrowing(d: BorrowingInputs) {
+  const income = (parseFloat(d.annualIncome) || 0) + (parseFloat(d.partnerIncome) || 0);
+  if (income <= 0) return null;
+  const netMonthly = (income * 0.78) / 12;
+  const available =
+    netMonthly * 0.35 -
+    (parseFloat(d.existingLoans) || 0) -
+    (parseFloat(d.creditCards) || 0) * 0.03 -
+    (parseFloat(d.livingExpenses) || 0);
+  if (available <= 0) return { capacity: 0, monthly: 0, annual: 0 };
+  const r = ((parseFloat(d.interestRate) || 6.5) + 3) / 100 / 12;
+  const n = (parseInt(d.loanTerm) || 30) * 12;
+  const capacity = available * ((1 - Math.pow(1 + r, -n)) / r);
+  const actualR = (parseFloat(d.interestRate) || 6.5) / 100 / 12;
+  const monthly = (capacity * actualR) / (1 - Math.pow(1 + actualR, -n));
+  return { capacity: Math.max(0, capacity), monthly: Math.max(0, monthly), annual: Math.max(0, monthly * 12) };
+}
+
+// ─── Repayment ───
+interface RepaymentInputs {
+  loanAmount: string;
+  interestRate: string;
+  loanTerm: string;
+  frequency: Frequency;
+}
+
+const defaultRepayment: RepaymentInputs = {
+  loanAmount: "500000",
+  interestRate: "6.50",
+  loanTerm: "30",
+  frequency: "monthly",
+};
+
+function calcRepayment(d: RepaymentInputs) {
+  const P = parseFloat(d.loanAmount) || 0;
+  const rate = parseFloat(d.interestRate) / 100 || 0;
+  const years = parseInt(d.loanTerm) || 30;
+  if (P <= 0 || rate <= 0) return null;
+  const ppy = d.frequency === "monthly" ? 12 : d.frequency === "fortnightly" ? 26 : 52;
+  const r = rate / ppy;
+  const n = years * ppy;
+  const repayment = (P * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+  return { repayment, totalRepaid: repayment * n, totalInterest: repayment * n - P };
+}
+
+// ─── Purchase Costs ───
+interface PurchaseInputs {
+  propertyValue: string;
+  conveyancerFees: string;
+  buildingPestFees: string;
+}
+
+const defaultPurchase: PurchaseInputs = {
+  propertyValue: "600000",
+  conveyancerFees: "2000",
+  buildingPestFees: "550",
+};
+
+const REGISTRATION_FEE = 238.14;
+
+function calcStampDuty(value: number): number {
+  if (value <= 25000) return value * 0.014;
+  if (value <= 130000) return 350 + (value - 25000) * 0.024;
+  if (value <= 960000) return 2870 + (value - 130000) * 0.06;
+  return 52670 + (value - 960000) * 0.055;
+}
+
+function calcTransferFee(value: number): number {
+  if (value <= 130000) return 1134;
+  if (value <= 440000) return 1134 + (value - 130000) * 0.0023;
+  if (value <= 960000) return 1847 + (value - 440000) * 0.0018;
+  return 2783 + (value - 960000) * 0.0014;
+}
+
+function calcPurchaseCosts(d: PurchaseInputs) {
+  const value = parseFloat(d.propertyValue) || 0;
+  if (value <= 0) return null;
+  const stampDuty = calcStampDuty(value);
+  const transferFee = calcTransferFee(value);
+  const registrationFee = REGISTRATION_FEE;
+  const conveyancerFees = parseFloat(d.conveyancerFees) || 2000;
+  const buildingPestFees = parseFloat(d.buildingPestFees) || 550;
+  const total = stampDuty + transferFee + registrationFee + conveyancerFees + buildingPestFees;
+  return { stampDuty, transferFee, registrationFee, conveyancerFees, buildingPestFees, total };
+}
+
+// ─── Refinance ───
+interface RefinanceInputs {
+  currentBalance: string;
+  currentRate: string;
+  remainingTerm: string;
+  newRate: string;
+  newTerm: string;
+}
+
+const defaultRefinance: RefinanceInputs = {
+  currentBalance: "500000",
+  currentRate: "6.50",
+  remainingTerm: "25",
+  newRate: "5.99",
+  newTerm: "25",
+};
+
+function calcRefinance(d: RefinanceInputs) {
+  const P = parseFloat(d.currentBalance) || 0;
+  const curRate = parseFloat(d.currentRate) / 100 || 0;
+  const curTerm = parseInt(d.remainingTerm) || 25;
+  const newRate = parseFloat(d.newRate) / 100 || 0;
+  const newTerm = parseInt(d.newTerm) || 25;
+  if (P <= 0 || curRate <= 0 || newRate <= 0) return null;
+  const curR = curRate / 12;
+  const curN = curTerm * 12;
+  const curMonthly = (P * curR * Math.pow(1 + curR, curN)) / (Math.pow(1 + curR, curN) - 1);
+  const newR = newRate / 12;
+  const newN = newTerm * 12;
+  const newMonthly = (P * newR * Math.pow(1 + newR, newN)) / (Math.pow(1 + newR, newN) - 1);
+  const monthlySaving = curMonthly - newMonthly;
+  const totalCurrentCost = curMonthly * curN;
+  const totalNewCost = newMonthly * newN;
+  const totalSaving = totalCurrentCost - totalNewCost;
+  return {
+    currentMonthly: curMonthly,
+    newMonthly,
+    monthlySaving,
+    totalCurrentCost,
+    totalNewCost,
+    totalSaving,
+    annualSaving: monthlySaving * 12,
+  };
+}
+
+// ─── Shared Input Component ───
+function InputField({
+  label, value, onChange, prefix, suffix, placeholder, hint, min, max, step,
+}: {
+  label: string; value: string; onChange: (v: string) => void;
+  prefix?: string; suffix?: string; placeholder?: string; hint?: string;
+  min?: string; max?: string; step?: string;
+}) {
+  return (
+    <div>
+      <label className="flex items-center gap-1.5 font-inter text-xs uppercase tracking-wider text-charcoal/50 mb-2">
+        {label}
+        {hint && (
+          <span title={hint} className="cursor-help">
+            <Info size={11} className="text-charcoal/30" />
+          </span>
+        )}
+      </label>
+      <div className="relative">
+        {prefix && (
+          <span className="absolute left-4 top-1/2 -translate-y-1/2 font-inter text-sm text-charcoal/40">
+            {prefix}
+          </span>
+        )}
+        <input
+          type="number"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={placeholder}
+          min={min}
+          max={max}
+          step={step}
+          className={`w-full px-4 py-3.5 bg-white border border-marble-300 text-charcoal font-inter text-sm focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/30 transition-all duration-200 placeholder:text-charcoal/30 ${
+            prefix ? "pl-8" : ""
+          } ${suffix ? "pr-12" : ""}`}
+        />
+        {suffix && (
+          <span className="absolute right-4 top-1/2 -translate-y-1/2 font-inter text-sm text-charcoal/40">
+            {suffix}
+          </span>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default function CalculatorsPageContent() {
+  const [activeTab, setActiveTab] = useState<CalcTab>("borrowing");
+
+  const [bForm, setBForm] = useState<BorrowingInputs>(defaultBorrowing);
+  const [bCalculated, setBCalculated] = useState(false);
+  const bUpdate = (field: keyof BorrowingInputs) => (value: string) =>
+    setBForm((p) => ({ ...p, [field]: value }));
+
+  const [rForm, setRForm] = useState<RepaymentInputs>(defaultRepayment);
+  const [rCalculated, setRCalculated] = useState(false);
+  const rUpdate = (field: keyof RepaymentInputs) => (value: string) =>
+    setRForm((p) => ({ ...p, [field]: value }));
+
+  const [pForm, setPForm] = useState<PurchaseInputs>(defaultPurchase);
+  const [pCalculated, setPCalculated] = useState(false);
+  const pUpdate = (field: keyof PurchaseInputs) => (value: string) =>
+    setPForm((p) => ({ ...p, [field]: value }));
+
+  const [refForm, setRefForm] = useState<RefinanceInputs>(defaultRefinance);
+  const [refCalculated, setRefCalculated] = useState(false);
+  const refUpdate = (field: keyof RefinanceInputs) => (value: string) =>
+    setRefForm((p) => ({ ...p, [field]: value }));
+
+  const bResult = useMemo(() => (bCalculated ? calcBorrowing(bForm) : null), [bForm, bCalculated]);
+  const rResult = useMemo(() => (rCalculated ? calcRepayment(rForm) : null), [rForm, rCalculated]);
+  const pResult = useMemo(() => (pCalculated ? calcPurchaseCosts(pForm) : null), [pForm, pCalculated]);
+  const refResult = useMemo(() => (refCalculated ? calcRefinance(refForm) : null), [refForm, refCalculated]);
+
+  const tabs: { key: CalcTab; label: string; icon: React.ReactNode }[] = [
+    { key: "borrowing", label: "Borrowing Calculator", icon: <DollarSign size={18} /> },
+    { key: "repayment", label: "Repayment Calculator", icon: <Calculator size={18} /> },
+    { key: "purchase", label: "Purchase Costs Calculator", icon: <Home size={18} /> },
+    { key: "refinance", label: "Refinance Calculator", icon: <RefreshCw size={18} /> },
+  ];
+
+  return (
+    <>
+      <PageHero
+        eyebrow="Financial Tools"
+        title="Mortgage Calculators"
+        subtitle="Estimate your borrowing capacity, loan repayments, purchase costs, and potential refinancing savings — all in one place."
+        breadcrumb={[{ label: "Calculators", href: "/calculators" }]}
+      />
+
+      <section className="section-padding bg-white">
+        <div className="container-luxury max-w-5xl mx-auto">
+          {/* Tab Navigation */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-0 border border-marble-300 mb-10">
+            {tabs.map((tab) => (
+              <button
+                key={tab.key}
+                onClick={() => setActiveTab(tab.key)}
+                className={`flex items-center justify-center gap-2 px-4 py-4 font-inter text-xs sm:text-sm tracking-wide transition-all duration-300 border-b-2 ${
+                  activeTab === tab.key
+                    ? "bg-charcoal text-white border-gold"
+                    : "bg-white text-charcoal/60 border-transparent hover:bg-marble-100 hover:text-charcoal"
+                }`}
+              >
+                {tab.icon}
+                <span className="hidden sm:inline">{tab.label}</span>
+                <span className="sm:hidden">{tab.label.replace(" Calculator", "")}</span>
+              </button>
+            ))}
+          </div>
+
+          {/* ── Borrowing Capacity ── */}
+          {activeTab === "borrowing" && (
+            <motion.div key="borrowing" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                <div>
+                  <h2 className="font-playfair text-2xl font-semibold text-charcoal mb-2">Borrowing Power Calculator</h2>
+                  <div className="w-10 h-px bg-gold mb-4" />
+                  <p className="font-inter text-sm text-charcoal/60 mb-8">
+                    Enter your income and expenses to estimate how much you may be able to borrow for a home loan.
+                  </p>
+                  <form onSubmit={(e) => { e.preventDefault(); setBCalculated(true); }} className="space-y-5">
+                    <div className="grid grid-cols-2 gap-4">
+                      <InputField label="Annual Income *" value={bForm.annualIncome} onChange={bUpdate("annualIncome")} prefix="$" placeholder="80000" hint="Gross annual income before tax" min="0" />
+                      <InputField label="Partner Income" value={bForm.partnerIncome} onChange={bUpdate("partnerIncome")} prefix="$" placeholder="0" hint="Leave blank if applying solo" min="0" />
+                    </div>
+                    <div className="grid grid-cols-3 gap-4">
+                      <InputField label="Living Expenses" value={bForm.livingExpenses} onChange={bUpdate("livingExpenses")} prefix="$" placeholder="2500" hint="Monthly living costs" min="0" />
+                      <InputField label="Existing Loans" value={bForm.existingLoans} onChange={bUpdate("existingLoans")} prefix="$" placeholder="0" hint="Monthly loan repayments" min="0" />
+                      <InputField label="Credit Cards" value={bForm.creditCards} onChange={bUpdate("creditCards")} prefix="$" placeholder="0" hint="Total credit card limits" min="0" />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <InputField label="Interest Rate" value={bForm.interestRate} onChange={bUpdate("interestRate")} suffix="%" placeholder="6.50" min="0.1" max="20" step="0.05" />
+                      <InputField label="Loan Term" value={bForm.loanTerm} onChange={bUpdate("loanTerm")} suffix="yrs" placeholder="30" min="5" max="30" />
+                    </div>
+                    <button type="submit" className="btn-gold w-full justify-center"><Calculator size={16} /> Calculate Borrowing Capacity</button>
+                  </form>
+                </div>
+                <div>
+                  {bResult ? (
+                    <div className="space-y-4">
+                      <div className="bg-charcoal p-8 relative">
+                        <div className="absolute top-0 right-0 w-12 h-12 border-t border-r border-gold/30" />
+                        <p className="font-inter text-xs tracking-[0.2em] uppercase text-gold mb-2">Estimated Borrowing Capacity</p>
+                        <div className="font-playfair text-4xl md:text-5xl font-semibold text-white mt-2">{formatCurrency(bResult.capacity)}</div>
+                        <div className="w-8 h-px bg-gold my-5" />
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <div className="font-inter text-xs text-white/40 uppercase tracking-wider mb-1">Monthly Repayment</div>
+                            <div className="font-playfair text-xl text-white font-semibold">{formatCurrency(bResult.monthly)}</div>
+                          </div>
+                          <div>
+                            <div className="font-inter text-xs text-white/40 uppercase tracking-wider mb-1">Annual Repayment</div>
+                            <div className="font-playfair text-xl text-white font-semibold">{formatCurrency(bResult.annual)}</div>
+                          </div>
+                        </div>
+                      </div>
+                      <Link href="/contact" className="btn-gold w-full justify-center">Speak with a Broker <ArrowRight size={16} /></Link>
+                    </div>
+                  ) : (
+                    <div className="h-full bg-marble-100 border border-dashed border-marble-300 flex flex-col items-center justify-center py-20 text-center">
+                      <DollarSign size={40} className="text-gold/30 mb-4" />
+                      <p className="font-playfair text-lg text-charcoal/30 italic mb-1">Your results will appear here</p>
+                      <p className="font-inter text-xs text-charcoal/20">Enter your details and click Calculate</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+              <p className="mt-6 font-inter text-xs text-charcoal/40 text-center">
+                Estimate only. Uses a 3% assessment rate buffer per APRA guidelines. Actual amounts may vary between lenders.
+              </p>
+            </motion.div>
+          )}
+
+          {/* ── Repayment ── */}
+          {activeTab === "repayment" && (
+            <motion.div key="repayment" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                <div>
+                  <h2 className="font-playfair text-2xl font-semibold text-charcoal mb-2">Repayment Calculator</h2>
+                  <div className="w-10 h-px bg-gold mb-4" />
+                  <p className="font-inter text-sm text-charcoal/60 mb-8">
+                    Calculate your estimated loan repayments. Enter your own interest rate to see accurate figures.
+                  </p>
+                  <form onSubmit={(e) => { e.preventDefault(); setRCalculated(true); }} className="space-y-5">
+                    <InputField label="Loan Amount *" value={rForm.loanAmount} onChange={rUpdate("loanAmount")} prefix="$" placeholder="500000" min="10000" />
+                    <InputField label="Interest Rate (p.a.) *" value={rForm.interestRate} onChange={rUpdate("interestRate")} suffix="%" placeholder="6.50" min="0.1" max="20" step="0.05" hint="Enter your own interest rate" />
+                    <InputField label="Loan Term *" value={rForm.loanTerm} onChange={rUpdate("loanTerm")} suffix="yrs" placeholder="30" min="1" max="30" />
+                    <div>
+                      <label className="block font-inter text-xs uppercase tracking-wider text-charcoal/50 mb-2">Repayment Frequency</label>
+                      <div className="grid grid-cols-3 gap-2">
+                        {(["monthly", "fortnightly", "weekly"] as Frequency[]).map((freq) => (
+                          <button
+                            key={freq}
+                            type="button"
+                            onClick={() => setRForm((p) => ({ ...p, frequency: freq }))}
+                            className={`py-3 text-xs font-inter capitalize border transition-all duration-200 ${
+                              rForm.frequency === freq
+                                ? "bg-gold text-white border-gold"
+                                : "bg-white text-charcoal/50 border-marble-300 hover:border-gold hover:text-gold"
+                            }`}
+                          >
+                            {freq}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                    <button type="submit" className="btn-gold w-full justify-center"><Calculator size={16} /> Calculate Repayments</button>
+                  </form>
+                </div>
+                <div>
+                  {rResult ? (
+                    <div className="space-y-4">
+                      <div className="bg-charcoal p-8 relative">
+                        <div className="absolute top-0 right-0 w-12 h-12 border-t border-r border-gold/30" />
+                        <p className="font-inter text-xs tracking-[0.2em] uppercase text-gold mb-2">
+                          {rForm.frequency.charAt(0).toUpperCase() + rForm.frequency.slice(1)} Repayment
+                        </p>
+                        <div className="font-playfair text-4xl md:text-5xl font-semibold text-white mt-2">{formatCurrency(rResult.repayment)}</div>
+                        <p className="font-inter text-xs text-white/40 mt-1">
+                          per {rForm.frequency === "monthly" ? "month" : rForm.frequency === "fortnightly" ? "fortnight" : "week"}
+                        </p>
+                      </div>
+                      <div className="grid grid-cols-3 gap-px bg-marble-300">
+                        {[
+                          { label: "Loan Amount", value: formatCurrency(parseFloat(rForm.loanAmount) || 0) },
+                          { label: "Total Interest", value: formatCurrency(rResult.totalInterest) },
+                          { label: "Total Repaid", value: formatCurrency(rResult.totalRepaid) },
+                        ].map((item) => (
+                          <div key={item.label} className="bg-white p-5 text-center">
+                            <div className="font-inter text-xs text-charcoal/40 uppercase tracking-wider mb-1">{item.label}</div>
+                            <div className="font-playfair text-sm font-semibold text-charcoal">{item.value}</div>
+                          </div>
+                        ))}
+                      </div>
+                      <Link href="/contact" className="btn-gold w-full justify-center">Speak with a Broker <ArrowRight size={16} /></Link>
+                    </div>
+                  ) : (
+                    <div className="h-full bg-marble-100 border border-dashed border-marble-300 flex flex-col items-center justify-center py-20 text-center">
+                      <Calculator size={40} className="text-gold/30 mb-4" />
+                      <p className="font-playfair text-lg text-charcoal/30 italic mb-1">Your results will appear here</p>
+                      <p className="font-inter text-xs text-charcoal/20">Enter your loan details and click Calculate</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {/* ── Purchase Costs ── */}
+          {activeTab === "purchase" && (
+            <motion.div key="purchase" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                <div>
+                  <h2 className="font-playfair text-2xl font-semibold text-charcoal mb-2">Purchase Costs Calculator</h2>
+                  <div className="w-10 h-px bg-gold mb-4" />
+                  <p className="font-inter text-sm text-charcoal/60 mb-8">
+                    Estimate the total upfront costs of purchasing a property, including stamp duty, transfer fees, and other expenses.
+                  </p>
+                  <form onSubmit={(e) => { e.preventDefault(); setPCalculated(true); }} className="space-y-5">
+                    <InputField label="Property Value *" value={pForm.propertyValue} onChange={pUpdate("propertyValue")} prefix="$" placeholder="600000" min="0" hint="Purchase price of the property" />
+                    <div className="border-t border-marble-300 pt-5">
+                      <p className="font-inter text-xs uppercase tracking-wider text-gold mb-4">Adjustable Estimates</p>
+                      <div className="grid grid-cols-2 gap-4">
+                        <InputField label="Conveyancer Fees" value={pForm.conveyancerFees} onChange={pUpdate("conveyancerFees")} prefix="$" placeholder="2000" min="0" hint="Estimated conveyancer/solicitor fees" />
+                        <InputField label="Building & Pest" value={pForm.buildingPestFees} onChange={pUpdate("buildingPestFees")} prefix="$" placeholder="550" min="0" hint="Estimated building and pest inspection" />
+                      </div>
+                    </div>
+                    <div className="border-t border-marble-300 pt-5">
+                      <p className="font-inter text-xs uppercase tracking-wider text-charcoal/40 mb-3">Fixed Fees</p>
+                      <div className="flex justify-between items-center py-2 px-4 bg-marble-100 border border-marble-300">
+                        <span className="font-inter text-sm text-charcoal/60">Registration Fees</span>
+                        <span className="font-inter text-sm font-medium text-charcoal">{formatCurrencyDecimal(REGISTRATION_FEE)}</span>
+                      </div>
+                    </div>
+                    <button type="submit" className="btn-gold w-full justify-center"><Home size={16} /> Calculate Purchase Costs</button>
+                  </form>
+                </div>
+                <div>
+                  {pResult ? (
+                    <div className="space-y-4">
+                      <div className="bg-charcoal p-8 relative">
+                        <div className="absolute top-0 right-0 w-12 h-12 border-t border-r border-gold/30" />
+                        <p className="font-inter text-xs tracking-[0.2em] uppercase text-gold mb-2">Total Purchase Costs</p>
+                        <div className="font-playfair text-4xl md:text-5xl font-semibold text-white mt-2">{formatCurrency(pResult.total)}</div>
+                        <div className="w-8 h-px bg-gold my-5" />
+                        <div className="space-y-3">
+                          {[
+                            { label: "Stamp Duty", value: pResult.stampDuty, note: "Based on property value" },
+                            { label: "Transfer Fees", value: pResult.transferFee, note: "Based on property value" },
+                            { label: "Registration Fees", value: pResult.registrationFee, note: "Fixed" },
+                            { label: "Conveyancer Fees", value: pResult.conveyancerFees, note: "Estimate" },
+                            { label: "Building & Pest", value: pResult.buildingPestFees, note: "Estimate" },
+                          ].map((item) => (
+                            <div key={item.label} className="flex items-center justify-between py-1">
+                              <div>
+                                <span className="font-inter text-sm text-white/70">{item.label}</span>
+                                <span className="font-inter text-[10px] text-white/30 ml-2">{item.note}</span>
+                              </div>
+                              <span className="font-playfair text-sm font-semibold text-white">{formatCurrency(item.value)}</span>
+                            </div>
+                          ))}
+                          <div className="border-t border-white/10 pt-3 flex items-center justify-between">
+                            <span className="font-inter text-sm font-medium text-gold">Total</span>
+                            <span className="font-playfair text-xl font-semibold text-gold">{formatCurrency(pResult.total)}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <Link href="/contact" className="btn-gold w-full justify-center">Speak with a Broker <ArrowRight size={16} /></Link>
+                    </div>
+                  ) : (
+                    <div className="h-full bg-marble-100 border border-dashed border-marble-300 flex flex-col items-center justify-center py-20 text-center">
+                      <Home size={40} className="text-gold/30 mb-4" />
+                      <p className="font-playfair text-lg text-charcoal/30 italic mb-1">Your cost breakdown will appear here</p>
+                      <p className="font-inter text-xs text-charcoal/20">Enter property value and click Calculate</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+              <p className="mt-6 font-inter text-xs text-charcoal/40 text-center">
+                Estimates based on VIC rates. Stamp duty and transfer fees vary by state. Contact us for accurate figures.
+              </p>
+            </motion.div>
+          )}
+
+          {/* ── Refinance ── */}
+          {activeTab === "refinance" && (
+            <motion.div key="refinance" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3 }}>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                <div>
+                  <h2 className="font-playfair text-2xl font-semibold text-charcoal mb-2">Refinance Calculator</h2>
+                  <div className="w-10 h-px bg-gold mb-4" />
+                  <p className="font-inter text-sm text-charcoal/60 mb-8">
+                    Compare your current loan against a new rate to see how much you could save. Enter your own rates below.
+                  </p>
+                  <form onSubmit={(e) => { e.preventDefault(); setRefCalculated(true); }} className="space-y-5">
+                    <InputField label="Current Loan Balance *" value={refForm.currentBalance} onChange={refUpdate("currentBalance")} prefix="$" placeholder="500000" min="10000" />
+                    <div className="grid grid-cols-2 gap-4">
+                      <InputField label="Current Rate (p.a.) *" value={refForm.currentRate} onChange={refUpdate("currentRate")} suffix="%" placeholder="6.50" min="0.1" max="20" step="0.05" hint="Enter your current interest rate" />
+                      <InputField label="Remaining Term *" value={refForm.remainingTerm} onChange={refUpdate("remainingTerm")} suffix="yrs" placeholder="25" min="1" max="30" />
+                    </div>
+                    <div className="border-t border-marble-300 pt-5">
+                      <p className="font-inter text-xs uppercase tracking-wider text-gold mb-4">New Loan Details</p>
+                      <div className="grid grid-cols-2 gap-4">
+                        <InputField label="New Rate (p.a.) *" value={refForm.newRate} onChange={refUpdate("newRate")} suffix="%" placeholder="5.99" min="0.1" max="20" step="0.05" hint="Enter the new interest rate" />
+                        <InputField label="New Loan Term *" value={refForm.newTerm} onChange={refUpdate("newTerm")} suffix="yrs" placeholder="25" min="1" max="30" />
+                      </div>
+                    </div>
+                    <button type="submit" className="btn-gold w-full justify-center"><RefreshCw size={16} /> Calculate Savings</button>
+                  </form>
+                </div>
+                <div>
+                  {refResult ? (
+                    <div className="space-y-4">
+                      <div className="bg-charcoal p-8 relative">
+                        <div className="absolute top-0 right-0 w-12 h-12 border-t border-r border-gold/30" />
+                        <p className="font-inter text-xs tracking-[0.2em] uppercase text-gold mb-2">Monthly Saving</p>
+                        <div className="font-playfair text-4xl md:text-5xl font-semibold text-white mt-2">
+                          {refResult.monthlySaving > 0 ? formatCurrency(refResult.monthlySaving) : "$0"}
+                        </div>
+                        <p className="font-inter text-xs text-white/40 mt-1">per month</p>
+                        <div className="w-8 h-px bg-gold my-5" />
+                        <div className="space-y-3">
+                          <div className="flex justify-between py-1">
+                            <span className="font-inter text-sm text-white/50">Current Monthly</span>
+                            <span className="font-playfair text-sm font-semibold text-white">{formatCurrency(refResult.currentMonthly)}</span>
+                          </div>
+                          <div className="flex justify-between py-1">
+                            <span className="font-inter text-sm text-white/50">New Monthly</span>
+                            <span className="font-playfair text-sm font-semibold text-gold">{formatCurrency(refResult.newMonthly)}</span>
+                          </div>
+                          <div className="border-t border-white/10 pt-3 flex justify-between py-1">
+                            <span className="font-inter text-sm text-white/50">Annual Saving</span>
+                            <span className="font-playfair text-sm font-semibold text-white">{formatCurrency(refResult.annualSaving)}</span>
+                          </div>
+                          <div className="flex justify-between py-1">
+                            <span className="font-inter text-sm font-medium text-gold">Total Saving Over Life</span>
+                            <span className="font-playfair text-xl font-semibold text-gold">
+                              {refResult.totalSaving > 0 ? formatCurrency(refResult.totalSaving) : "$0"}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <Link href="/contact" className="btn-gold w-full justify-center">Speak with a Broker <ArrowRight size={16} /></Link>
+                    </div>
+                  ) : (
+                    <div className="h-full bg-marble-100 border border-dashed border-marble-300 flex flex-col items-center justify-center py-20 text-center">
+                      <RefreshCw size={40} className="text-gold/30 mb-4" />
+                      <p className="font-playfair text-lg text-charcoal/30 italic mb-1">Your savings will appear here</p>
+                      <p className="font-inter text-xs text-charcoal/20">Enter your current and new loan details</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+              <p className="mt-6 font-inter text-xs text-charcoal/40 text-center">
+                Estimate only. Does not include refinancing costs such as discharge fees or new loan establishment fees.
+              </p>
+            </motion.div>
+          )}
+        </div>
+      </section>
+
+      <CTABanner />
+    </>
+  );
+}

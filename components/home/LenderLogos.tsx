@@ -26,7 +26,7 @@ export default function LenderLogos() {
           viewport={{ once: true }}
           className="text-center font-inter text-xs tracking-[0.25em] uppercase text-charcoal/40 mb-8"
         >
-          Our Lender Panel — 25+ Banks & Specialists
+          Our Lender Panel — 40+ Banks & Specialists
         </motion.p>
 
         <div className="relative">

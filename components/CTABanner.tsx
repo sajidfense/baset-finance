@@ -25,7 +25,7 @@ export default function CTABanner() {
           Book a free consultation with one of our expert mortgage brokers and discover your borrowing potential today.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link href="/calculators/borrowing-capacity" className="btn-gold">
+          <Link href="/calculators" className="btn-gold">
             Check Borrowing Capacity
             <ArrowRight size={16} />
           </Link>

@@ -13,7 +13,7 @@ const steps = [
     title: "Understand Your Borrowing Power",
     description: "We start by assessing your income, expenses, and financial situation to determine how much you can borrow.",
     action: "Use our Borrowing Calculator",
-    href: "/calculators/borrowing-capacity",
+    href: "/calculators",
   },
   {
     step: "02",
@@ -107,7 +107,7 @@ export default function FirstHomeBuyersContent() {
                   Book Free Consultation
                   <ArrowRight size={16} />
                 </Link>
-                <Link href="/calculators/borrowing-capacity" className="btn-outline-gold">
+                <Link href="/calculators" className="btn-outline-gold">
                   Check Borrowing Power
                 </Link>
               </div>

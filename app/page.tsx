@@ -11,7 +11,7 @@ import CTABanner from "@/components/CTABanner";
 export const metadata: Metadata = {
   title: "Baset Finance | Mortgage Brokers For The People",
   description:
-    "Trusted Australian mortgage brokers helping our people secure smarter home loans with transparent advice and better lending solutions. Access 25+ lenders.",
+    "Trusted Australian mortgage brokers helping our people secure smarter home loans with transparent advice and better lending solutions. Access 40+ lenders.",
 };
 
 export default function HomePage() {

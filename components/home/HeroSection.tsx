@@ -38,15 +38,16 @@ export default function HeroSection() {
         className="absolute right-[8%] top-1/2 -translate-y-1/2 w-[380px] h-[380px] rounded-full border border-gold/5 pointer-events-none"
       />
 
-      {/* ICXC NIKA symbol */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 0.06, y: 0 }}
-        transition={{ duration: 1.5, delay: 1 }}
-        className="absolute top-24 right-[18%] font-playfair text-[200px] text-gold leading-none select-none pointer-events-none"
-      >
-        ✝
-      </motion.div>
+      {/* Marble background image */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage: 'url(/homepagebackground.png)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          opacity: 0.18,
+        }}
+      />
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-6 lg:px-12 py-24 lg:py-0 relative z-10">
@@ -97,7 +98,7 @@ export default function HeroSection() {
             transition={{ duration: 0.7, delay: 0.5 }}
             className="flex flex-col sm:flex-row gap-4"
           >
-            <Link href="/calculators/borrowing-capacity" className="btn-gold">
+            <Link href="/calculators" className="btn-gold">
               Check Borrowing Capacity
               <ArrowRight size={16} />
             </Link>
@@ -114,11 +115,12 @@ export default function HeroSection() {
             className="flex flex-wrap items-center gap-6 mt-14 pt-10 border-t border-marble-300"
           >
             {[
-              { value: "25+", label: "Lender Panel" },
+              { value: "Genuine", label: "Care" },
+              { value: "40+", label: "Lenders" },
               { value: "Fast", label: "Approvals" },
               { value: "Free", label: "Consultation" },
-            ].map((stat) => (
-              <div key={stat.label} className="flex items-center gap-3">
+            ].map((stat, index, arr) => (
+              <div key={stat.label} className="flex items-center gap-3 flex-1">
                 <div>
                   <div className="font-playfair text-xl font-semibold text-charcoal">
                     {stat.value}
@@ -127,7 +129,7 @@ export default function HeroSection() {
                     {stat.label}
                   </div>
                 </div>
-                <div className="w-px h-8 bg-marble-300 last:hidden" />
+                {index < arr.length - 1 && <div className="w-px h-8 bg-marble-300 ml-auto" />}
               </div>
             ))}
           </motion.div>

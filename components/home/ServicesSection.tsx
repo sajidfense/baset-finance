@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Home, RefreshCw, TrendingUp, Key, ArrowRight } from "lucide-react";
+import { Home, RefreshCw, TrendingUp, Key, Building2, ArrowRight } from "lucide-react";
 
 const services = [
   {
@@ -11,7 +11,7 @@ const services = [
     description:
       "Whether you're purchasing your first home or upgrading to your dream property, we find the right loan at the right rate.",
     href: "/services",
-    features: ["Competitive rates", "25+ lenders", "Expert guidance"],
+    features: ["Competitive rates", "40+ lenders", "Expert guidance"],
   },
   {
     icon: <RefreshCw size={28} />,
@@ -36,6 +36,14 @@ const services = [
       "We make the first home buying journey simple, transparent, and stress-free — from pre-approval to settlement.",
     href: "/first-home-buyers",
     features: ["FHBG guidance", "Stamp duty help", "Step-by-step support"],
+  },
+  {
+    icon: <Building2 size={28} />,
+    title: "Commercial",
+    description:
+      "Financing for commercial properties, business premises, and mixed-use developments tailored to your business needs.",
+    href: "/services#commercial",
+    features: ["Commercial property", "Business premises", "Specialist lenders"],
   },
 ];
 

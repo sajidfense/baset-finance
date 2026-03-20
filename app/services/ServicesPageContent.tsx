@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import PageHero from "@/components/PageHero";
 import CTABanner from "@/components/CTABanner";
-import { Home, RefreshCw, TrendingUp, Key, HardHat, CheckCircle, ArrowRight } from "lucide-react";
+import { Home, RefreshCw, TrendingUp, Key, HardHat, Building2, CheckCircle, ArrowRight } from "lucide-react";
 
 const services = [
   {
@@ -12,9 +12,9 @@ const services = [
     icon: <Home size={32} />,
     title: "Home Loans",
     description:
-      "Whether you're purchasing your first home or upgrading to your next property, we search our panel of 25+ lenders to find the loan structure and rate that suits your unique situation.",
+      "Whether you're purchasing your first home or upgrading to your next property, we search our panel of 40+ lenders to find the loan structure and rate that suits your unique situation.",
     benefits: [
-      "Competitive interest rates from 25+ lenders",
+      "Competitive interest rates from 40+ lenders",
       "Variable, fixed, and split loan options",
       "Offset accounts and redraw facilities",
       "Owner-occupier and principal & interest structures",
@@ -70,6 +70,22 @@ const services = [
       "No cost to first home buyers",
     ],
     cta: { label: "Start Your Journey", href: "/first-home-buyers" },
+  },
+  {
+    id: "commercial",
+    icon: <Building2 size={32} />,
+    title: "Commercial Loans",
+    description:
+      "Financing for commercial properties, business premises, and mixed-use developments. We work with specialist commercial lenders to structure the right facility for your business needs.",
+    benefits: [
+      "Office, retail, and industrial property finance",
+      "Mixed-use development funding",
+      "Business premises acquisition",
+      "Commercial refinancing options",
+      "Tailored loan structures and terms",
+      "Access to specialist commercial lenders",
+    ],
+    cta: { label: "Discuss Commercial Finance", href: "/contact" },
   },
   {
     id: "construction",

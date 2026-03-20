@@ -16,14 +16,17 @@ const navLinks = [
       { label: "First Home Buyers", href: "/first-home-buyers" },
       { label: "Refinancing", href: "/refinancing" },
       { label: "Investment Loans", href: "/investment-loans" },
+      { label: "Commercial", href: "/services#commercial" },
     ],
   },
   {
     label: "Calculators",
-    href: "/calculators/borrowing-capacity",
+    href: "/calculators",
     children: [
-      { label: "Borrowing Capacity", href: "/calculators/borrowing-capacity" },
-      { label: "Loan Repayment", href: "/calculators/loan-repayment" },
+      { label: "Borrowing Capacity", href: "/calculators" },
+      { label: "Loan Repayment", href: "/calculators" },
+      { label: "Purchase Costs", href: "/calculators" },
+      { label: "Refinance", href: "/calculators" },
     ],
   },
   { label: "Referrer Program", href: "/referrer-program" },
@@ -53,7 +56,7 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="relative w-20 h-20">
+            <div className="relative w-8 h-8">
               <Image
                 src="/logo2.PNG"
                 alt="Baset Finance"
@@ -122,7 +125,7 @@ export default function Navbar() {
           {/* CTA Button */}
           <div className="hidden lg:block">
             <Link
-              href="/calculators/borrowing-capacity"
+              href="/calculators"
               className="btn-gold text-xs"
             >
               Check Borrowing Power
@@ -171,7 +174,7 @@ export default function Navbar() {
             ))}
             <div className="pt-4">
               <Link
-                href="/calculators/borrowing-capacity"
+                href="/calculators"
                 className="btn-gold w-full justify-center text-xs"
                 onClick={() => setMobileOpen(false)}
               >

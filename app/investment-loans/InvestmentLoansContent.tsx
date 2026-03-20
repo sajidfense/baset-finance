@@ -151,7 +151,7 @@ export default function InvestmentLoansContent() {
                 Book a Strategy Session
                 <ArrowRight size={16} />
               </Link>
-              <Link href="/calculators/borrowing-capacity" className="btn-outline-gold border-white/30 text-white hover:bg-gold hover:border-gold">
+              <Link href="/calculators" className="btn-outline-gold border-white/30 text-white hover:bg-gold hover:border-gold">
                 Check Borrowing Capacity
               </Link>
             </div>

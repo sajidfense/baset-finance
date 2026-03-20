@@ -30,7 +30,7 @@ const values = [
 ];
 
 const whyChoose = [
-  "Access to 25+ lenders including major banks and specialist lenders",
+  "Access to 40+ lenders including major banks and specialist lenders",
   "No cost to you — we're paid by lenders, not our people",
   "End-to-end support from pre-approval to settlement",
   "Ongoing loan reviews to ensure you stay competitive",
@@ -67,7 +67,13 @@ export default function AboutPageContent() {
               <div className="w-14 h-px bg-gold mb-6" />
               <div className="space-y-4 text-charcoal/70 font-inter text-base leading-relaxed">
                 <p>
-                  Baset Finance was founded on a simple but powerful belief: expert financial guidance should be an exciting and enjoyable experience, not corporate/boring/intimidating. For too long, the path to home ownership has felt like a journey everyday Australians have to walk alone, navigating a complex landscape without a clear map. Rejoice! You are in safe hands, for we are with you in every step of the way and beyond.
+                  Baset Finance was founded on a simple but powerful belief: expert financial guidance should be an exciting and enjoyable experience, not corporate/intimidating.
+                </p>
+                <p>
+                  For too long, the path to home ownership has felt like a journey everyday Australians have to walk alone, navigating a complex landscape without a clear map.
+                </p>
+                <p>
+                  Rejoice! You are in safe hands, for we are with you in every step of the way and beyond.
                 </p>
               </div>
             </motion.div>
@@ -86,7 +92,7 @@ export default function AboutPageContent() {
 
                 <div className="grid grid-cols-2 gap-8">
                   {[
-                    { value: "25+", label: "Lender Partners" },
+                    { value: "40+", label: "Lender Partners" },
                     { value: "40+", label: "Lenders Panel" },
                     { value: "100%", label: "People Focus" },
                     { value: "Free", label: "Consultation" },

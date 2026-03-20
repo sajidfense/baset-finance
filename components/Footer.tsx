@@ -11,7 +11,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="lg:col-span-1">
             <Link href="/" className="flex items-center gap-3 mb-6">
-              <div className="relative w-20 h-20 brightness-0 invert opacity-80">
+              <div className="relative w-8 h-8 brightness-0 invert opacity-80">
                 <Image src="/logo2.PNG" alt="Baset Finance" fill className="object-contain" />
               </div>
               <div>
@@ -56,6 +56,7 @@ export default function Footer() {
                 { label: "First Home Buyers", href: "/first-home-buyers" },
                 { label: "Refinancing", href: "/refinancing" },
                 { label: "Investment Loans", href: "/investment-loans" },
+                { label: "Commercial", href: "/services#commercial" },
                 { label: "Construction Loans", href: "/services" },
               ].map((item) => (
                 <li key={item.label}>
@@ -79,8 +80,8 @@ export default function Footer() {
             <ul className="space-y-3">
               {[
                 { label: "About Us", href: "/about" },
-                { label: "Borrowing Calculator", href: "/calculators/borrowing-capacity" },
-                { label: "Repayment Calculator", href: "/calculators/loan-repayment" },
+                { label: "Borrowing Calculator", href: "/calculators" },
+                { label: "Repayment Calculator", href: "/calculators" },
                 { label: "Referrer Program", href: "/referrer-program" },
                 { label: "Contact", href: "/contact" },
               ].map((item) => (
