@@ -11,7 +11,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="lg:col-span-1">
             <Link href="/" className="flex items-center gap-3 mb-6">
-              <div className="relative w-10 h-10 brightness-0 invert opacity-80">
+              <div className="relative w-20 h-20 brightness-0 invert opacity-80">
                 <Image src="/logo2.PNG" alt="Baset Finance" fill className="object-contain" />
               </div>
               <div>
