@@ -101,6 +101,15 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  font-weight: 700;
+}
+
+/* Ensure gold text on white/light backgrounds is bold for readability */
+.bg-white .text-gold,
+.marble-bg .text-gold,
+.bg-marble-100 .text-gold,
+.marble-section .text-gold {
+  font-weight: 600;
 }
 
 /* Thin gold line separator */

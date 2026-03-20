@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     template: "%s | Baset Finance",
   },
   description:
-    "Baset Finance — trusted Australian mortgage brokers helping you secure smarter home loans with transparent advice and better lending solutions. Compare 25+ lenders.",
+    "Baset Finance — trusted Australian mortgage brokers helping our people secure smarter home loans with transparent advice and better lending solutions. Compare 25+ lenders.",
   keywords: [
     "mortgage broker",
     "home loans",
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     siteName: "Baset Finance",
     title: "Baset Finance | Mortgage Brokers For The People",
     description:
-      "Trusted Australian mortgage brokers helping you secure smarter home loans with transparent advice and better lending solutions.",
+      "Trusted Australian mortgage brokers helping our people secure smarter home loans with transparent advice and better lending solutions.",
   },
   robots: {
     index: true,

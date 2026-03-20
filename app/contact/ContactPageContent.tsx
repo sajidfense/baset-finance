@@ -39,7 +39,7 @@ export default function ContactPageContent() {
       <PageHero
         eyebrow="Get In Touch"
         title="Let's Start Your Journey"
-        subtitle="Book a free, no-obligation consultation with one of our expert mortgage brokers. We're here to help you find the right solution."
+        subtitle="Book a free, no-obligation consultation with one of our expert mortgage brokers. We're here to help you find the right solution whilst enjoying the experience!"
         breadcrumb={[{ label: "Contact", href: "/contact" }]}
       />
 
@@ -70,14 +70,14 @@ export default function ContactPageContent() {
                     {
                       icon: <Phone size={18} />,
                       label: "Phone",
-                      value: "+61 (0) 000 000 000",
-                      href: "tel:+61000000000",
+                      value: "0420 601 553",
+                      href: "tel:+61420601553",
                     },
                     {
                       icon: <Mail size={18} />,
                       label: "Email",
-                      value: "info@basetfinance.com.au",
-                      href: "mailto:info@basetfinance.com.au",
+                      value: "baset@basetfinance.com.au",
+                      href: "mailto:baset@basetfinance.com.au",
                     },
                     {
                       icon: <MapPin size={18} />,
@@ -126,7 +126,7 @@ export default function ContactPageContent() {
                     Schedule a 20-minute discovery call with a broker. No obligation, no pressure.
                   </p>
                   <a
-                    href="tel:+61000000000"
+                    href="tel:+61420601553"
                     className="btn-gold text-xs w-full justify-center"
                   >
                     <Phone size={14} />

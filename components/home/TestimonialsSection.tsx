@@ -23,7 +23,7 @@ const testimonials = [
   },
   {
     name: "Priya M.",
-    role: "Refinancing Client",
+    role: "Refinancing",
     location: "Brisbane, QLD",
     quote:
       "I was paying too much on my existing mortgage. Baset Finance reviewed my situation and refinanced me to a much better rate, saving me over $400 per month. Incredible service.",
@@ -31,7 +31,7 @@ const testimonials = [
   },
   {
     name: "James & Emma L.",
-    role: "Home Loan Clients",
+    role: "Home Loan",
     location: "Perth, WA",
     quote:
       "The team at Baset Finance went above and beyond. They were available whenever we had questions and kept us informed throughout the entire process. True professionals.",
@@ -61,10 +61,10 @@ export default function TestimonialsSection() {
           className="text-center mb-14"
         >
           <p className="font-inter text-xs tracking-[0.25em] uppercase text-gold mb-4">
-            Client Stories
+            Our People's Stories
           </p>
           <h2 className="font-playfair text-3xl md:text-4xl text-charcoal font-semibold mb-4">
-            What Our Clients Say
+            What Our People Say
           </h2>
           <div className="w-14 h-px bg-gold mx-auto" />
         </motion.div>

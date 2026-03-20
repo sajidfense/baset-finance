@@ -6,9 +6,9 @@ import { Shield, Zap, Users, Target, Award, Clock } from "lucide-react";
 const trustItems = [
   {
     icon: <Users size={24} />,
-    value: "1000+",
-    label: "Clients Helped",
-    description: "Australians trust us to secure their home loans",
+    value: "Our People",
+    label: "Love Us",
+    description: "Our people love us as we love them",
   },
   {
     icon: <Shield size={24} />,
@@ -26,7 +26,7 @@ const trustItems = [
     icon: <Target size={24} />,
     value: "Personal",
     label: "Strategy",
-    description: "Tailored mortgage strategy for every client",
+    description: "Tailored mortgage strategy for every person",
   },
   {
     icon: <Award size={24} />,

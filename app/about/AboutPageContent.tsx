@@ -10,7 +10,7 @@ const values = [
   {
     icon: <Heart size={22} />,
     title: "People First",
-    description: "We genuinely care about our clients' financial wellbeing. Every decision we make is centred on what's best for you, not what earns us the highest commission.",
+    description: "We genuinely care about our people's financial wellbeing. Every decision we make is centred on what's best for you, not what earns us the highest commission.",
   },
   {
     icon: <Shield size={22} />,
@@ -20,7 +20,7 @@ const values = [
   {
     icon: <Star size={22} />,
     title: "Excellence",
-    description: "We hold ourselves to the highest standards of professionalism and service quality, ensuring every client receives a premium experience.",
+    description: "We hold ourselves to the highest standards of professionalism and service quality, ensuring every person receives a premium experience.",
   },
   {
     icon: <Users size={22} />,
@@ -31,7 +31,7 @@ const values = [
 
 const whyChoose = [
   "Access to 25+ lenders including major banks and specialist lenders",
-  "No cost to you — we're paid by lenders, not clients",
+  "No cost to you — we're paid by lenders, not our people",
   "End-to-end support from pre-approval to settlement",
   "Ongoing loan reviews to ensure you stay competitive",
   "Fast turnaround with experienced industry knowledge",
@@ -44,7 +44,7 @@ export default function AboutPageContent() {
       <PageHero
         eyebrow="About Baset Finance"
         title="Finance For The People, By The People"
-        subtitle="We exist to give every Australian access to expert mortgage advice — transparent, honest, and built around your goals."
+        subtitle="We exist to give our people access to expert mortgage advice — transparent, honest, and built around your goals."
         breadcrumb={[{ label: "About", href: "/about" }]}
       />
 
@@ -67,13 +67,7 @@ export default function AboutPageContent() {
               <div className="w-14 h-px bg-gold mb-6" />
               <div className="space-y-4 text-charcoal/70 font-inter text-base leading-relaxed">
                 <p>
-                  Baset Finance was founded on a simple but powerful belief: every Australian deserves access to expert financial guidance, not just the wealthy few. Too often, everyday families and individuals are left navigating the complex world of home loans alone.
-                </p>
-                <p>
-                  We set out to change that. As independent mortgage brokers, we work for you — not the banks. Our role is to cut through the complexity, negotiate on your behalf, and secure you the best possible deal from our panel of 25+ lenders.
-                </p>
-                <p>
-                  Whether you're buying your first home, expanding your investment portfolio, or looking to refinance — we treat every client with the same level of care, dedication, and professionalism.
+                  Baset Finance was founded on a simple but powerful belief: expert financial guidance should be an exciting and enjoyable experience, not corporate/boring/intimidating. For too long, the path to home ownership has felt like a journey everyday Australians have to walk alone, navigating a complex landscape without a clear map. Rejoice! You are in safe hands, for we are with you in every step of the way and beyond.
                 </p>
               </div>
             </motion.div>
@@ -92,9 +86,9 @@ export default function AboutPageContent() {
 
                 <div className="grid grid-cols-2 gap-8">
                   {[
-                    { value: "1000+", label: "Clients Helped" },
                     { value: "25+", label: "Lender Partners" },
-                    { value: "100%", label: "Client Focus" },
+                    { value: "40+", label: "Lenders Panel" },
+                    { value: "100%", label: "People Focus" },
                     { value: "Free", label: "Consultation" },
                   ].map((stat) => (
                     <div key={stat.label} className="text-center">
@@ -119,25 +113,71 @@ export default function AboutPageContent() {
         </div>
       </section>
 
-      {/* Our Mission */}
+      {/* Our Pillars */}
       <section className="section-padding marble-bg">
-        <div className="container-luxury text-center">
+        <div className="container-luxury">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="max-w-3xl mx-auto"
+            className="text-center mb-14"
           >
             <p className="font-inter text-xs tracking-[0.25em] uppercase text-gold mb-4">
-              Our Mission
+              Our Pillars
             </p>
-            <h2 className="font-playfair text-3xl md:text-4xl font-semibold text-charcoal mb-5">
-              Empowering Australians Through Better Finance
+            <h2 className="font-playfair text-3xl md:text-4xl font-semibold text-charcoal mb-4">
+              What Drives Us
             </h2>
-            <div className="w-14 h-px bg-gold mx-auto mb-6" />
+            <div className="w-14 h-px bg-gold mx-auto" />
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                title: "Empowerment Through Education",
+                description:
+                  "We don't just find you a loan; we ensure you understand the \"why\" behind every recommendation. We believe that an informed person is a confident one. By breaking down technical jargon and providing transparent insights, we give you the tools to take full control of your financial well being.",
+              },
+              {
+                title: "Unwavering Trust",
+                description:
+                  "As independent brokers, our loyalty is fixed firmly on you—not the banks. Trust is earned through transparency and genuine care, which is why we openly negotiate on your behalf across our panel of 40+ lenders. Our goal isn't just to secure a deal, but to secure the right deal for your specific needs.",
+              },
+              {
+                title: "Relationships Over Transactions",
+                description:
+                  "Whether you are stepping into your very first home, growing an investment portfolio, or seeking a better path through refinancing, you aren't just a file on a desk. We pride ourselves on building lasting partnerships. We treat every milestone with the same level of care and dedication we would for our own loved ones, standing by you long after the documents are signed. We are with you, we will never forsake you.",
+              },
+            ].map((pillar, index) => (
+              <motion.div
+                key={pillar.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="group p-8 border border-marble-300 hover:border-gold/40 hover:shadow-gold transition-all duration-300 bg-white"
+              >
+                <h3 className="font-playfair text-xl font-semibold text-charcoal mb-3">
+                  {pillar.title}
+                </h3>
+                <div className="w-8 h-px bg-gold mb-4" />
+                <p className="font-inter text-sm text-charcoal/60 leading-relaxed">
+                  {pillar.description}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+            className="text-center mt-12 max-w-3xl mx-auto"
+          >
             <p className="font-playfair italic text-xl md:text-2xl text-charcoal/70 leading-relaxed">
-              "To make expert mortgage advice accessible, transparent, and genuinely helpful for every Australian — regardless of where they're starting from."
+              At Baset Finance, we don't just bridge the gap between you and the lender—we build the foundation for your long-term peace and success.
             </p>
           </motion.div>
         </div>

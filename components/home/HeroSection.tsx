@@ -88,7 +88,7 @@ export default function HeroSection() {
             transition={{ duration: 0.7, delay: 0.3 }}
             className="text-charcoal/60 font-inter text-lg md:text-xl leading-relaxed mb-12 max-w-xl"
           >
-            Helping Australians secure smarter home loans with transparent advice and better lending solutions from 25+ lenders.
+            Secure smarter home loans whilst enjoying the experience. Trust, relationships and empowerment are the foundations of our company. We are with you.
           </motion.p>
 
           <motion.div
@@ -115,7 +115,6 @@ export default function HeroSection() {
           >
             {[
               { value: "25+", label: "Lender Panel" },
-              { value: "1000+", label: "Clients Helped" },
               { value: "Fast", label: "Approvals" },
               { value: "Free", label: "Consultation" },
             ].map((stat) => (

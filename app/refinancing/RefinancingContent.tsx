@@ -46,7 +46,7 @@ export default function RefinancingContent() {
       <PageHero
         eyebrow="Refinancing"
         title="Are You Getting the Best Deal?"
-        subtitle="Thousands of Australians are paying more than they should on their home loan. Our free loan health check could save you significantly — with no disruption to your lifestyle."
+        subtitle="Thousands of people are paying more than they should on their home loan. Our free loan health check could save you significantly — with no disruption to your lifestyle."
         breadcrumb={[{ label: "Refinancing", href: "/refinancing" }]}
       />
 
