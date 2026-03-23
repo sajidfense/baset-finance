@@ -54,10 +54,10 @@ function calcBorrowing(d: BorrowingInputs) {
   if (income <= 0) return null;
   const netMonthly = (income * 0.78) / 12;
   const available =
-    netMonthly * 0.35 -
+    netMonthly -
+    (parseFloat(d.livingExpenses) || 0) -
     (parseFloat(d.existingLoans) || 0) -
-    (parseFloat(d.creditCards) || 0) * 0.03 -
-    (parseFloat(d.livingExpenses) || 0);
+    (parseFloat(d.creditCards) || 0) * 0.03;
   if (available <= 0) return { capacity: 0, monthly: 0, annual: 0 };
   const r = ((parseFloat(d.interestRate) || 6.5) + 3) / 100 / 12;
   const n = (parseInt(d.loanTerm) || 30) * 12;

@@ -115,12 +115,12 @@ function calculateBorrowingCapacity(data: FormData): Results | null {
   const monthlyCardCommitment = creditCards * 0.03;
   const monthlyLivingExpenses = livingExpenses;
 
-  // Available for loan repayment (lenders typically use ~30-35% of net income)
+  // Available for loan repayment (net income minus all expenses and commitments)
   const availableForLoan =
-    netMonthlyIncome * 0.35 -
+    netMonthlyIncome -
+    monthlyLivingExpenses -
     monthlyExistingLoans -
-    monthlyCardCommitment -
-    monthlyLivingExpenses;
+    monthlyCardCommitment;
 
   if (availableForLoan <= 0) {
     return {
