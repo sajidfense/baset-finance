@@ -3,7 +3,16 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import PageHero from "@/components/PageHero";
-import { Phone, Mail, MapPin, Clock, Send, CheckCircle } from "lucide-react";
+import { submitToSheet } from "@/lib/submitToSheet";
+import {
+  Phone,
+  Mail,
+  MapPin,
+  Clock,
+  Send,
+  CheckCircle,
+  AlertCircle,
+} from "lucide-react";
 
 const loanTypes = [
   "Home Loan",
@@ -17,6 +26,7 @@ const loanTypes = [
 export default function ContactPageContent() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -28,10 +38,24 @@ export default function ContactPageContent() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    // Simulate form submission
-    await new Promise((r) => setTimeout(r, 1200));
+    setSubmitError("");
+
+    const result = await submitToSheet({
+      name: form.name,
+      email: form.email,
+      phone: form.phone,
+      loan: form.loanType,
+      message: form.message,
+    });
+
     setLoading(false);
-    setSubmitted(true);
+    if (result.success) {
+      setSubmitted(true);
+    } else {
+      setSubmitError(
+        result.error || "Something went wrong. Please try again."
+      );
+    }
   };
 
   return (
@@ -62,7 +86,9 @@ export default function ContactPageContent() {
                 </h2>
                 <div className="w-12 h-px bg-gold mb-6" />
                 <p className="font-inter text-sm text-charcoal/60 leading-relaxed mb-10">
-                  Whether you have a simple question or are ready to start your mortgage journey, our team is here to help. Reach out via any of the channels below.
+                  Whether you have a simple question or are ready to start your
+                  mortgage journey, our team is here to help. Reach out via any
+                  of the channels below.
                 </p>
 
                 <div className="space-y-6">
@@ -82,7 +108,7 @@ export default function ContactPageContent() {
                     {
                       icon: <MapPin size={18} />,
                       label: "Service Area",
-                      value: "Australia Wide",
+                      value: "Brisbane, QLD — Australia Wide",
                       href: null,
                     },
                     {
@@ -93,7 +119,9 @@ export default function ContactPageContent() {
                     },
                   ].map((item) => (
                     <div key={item.label} className="flex gap-4">
-                      <div className="text-gold mt-0.5 flex-shrink-0">{item.icon}</div>
+                      <div className="text-gold mt-0.5 flex-shrink-0">
+                        {item.icon}
+                      </div>
                       <div>
                         <div className="font-inter text-xs uppercase tracking-wider text-charcoal/40 mb-0.5">
                           {item.label}
@@ -106,7 +134,9 @@ export default function ContactPageContent() {
                             {item.value}
                           </a>
                         ) : (
-                          <span className="font-inter text-sm text-charcoal">{item.value}</span>
+                          <span className="font-inter text-sm text-charcoal">
+                            {item.value}
+                          </span>
                         )}
                       </div>
                     </div>
@@ -123,7 +153,8 @@ export default function ContactPageContent() {
                     Book a Free Call
                   </h3>
                   <p className="font-inter text-xs text-white/50 leading-relaxed mb-4">
-                    Schedule a 20-minute discovery call with a broker. No obligation, no pressure.
+                    Schedule a 20-minute discovery call with a broker. No
+                    obligation, no pressure.
                   </p>
                   <a
                     href="tel:+61420601553"
@@ -154,7 +185,8 @@ export default function ContactPageContent() {
                     </h3>
                     <div className="w-10 h-px bg-gold mx-auto mb-4" />
                     <p className="font-inter text-sm text-charcoal/60 max-w-sm">
-                      Thank you for reaching out. One of our brokers will be in touch within 24 hours to discuss your enquiry.
+                      Thank you for reaching out. One of our brokers will be in
+                      touch within 24 hours to discuss your enquiry.
                     </p>
                   </div>
                 ) : (
@@ -168,7 +200,9 @@ export default function ContactPageContent() {
                           type="text"
                           required
                           value={form.name}
-                          onChange={(e) => setForm({ ...form, name: e.target.value })}
+                          onChange={(e) =>
+                            setForm({ ...form, name: e.target.value })
+                          }
                           className="input-luxury"
                           placeholder="Your full name"
                         />
@@ -181,7 +215,9 @@ export default function ContactPageContent() {
                           type="email"
                           required
                           value={form.email}
-                          onChange={(e) => setForm({ ...form, email: e.target.value })}
+                          onChange={(e) =>
+                            setForm({ ...form, email: e.target.value })
+                          }
                           className="input-luxury"
                           placeholder="your@email.com"
                         />
@@ -196,7 +232,9 @@ export default function ContactPageContent() {
                         <input
                           type="tel"
                           value={form.phone}
-                          onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                          onChange={(e) =>
+                            setForm({ ...form, phone: e.target.value })
+                          }
                           className="input-luxury"
                           placeholder="04XX XXX XXX"
                         />
@@ -208,7 +246,9 @@ export default function ContactPageContent() {
                         <select
                           required
                           value={form.loanType}
-                          onChange={(e) => setForm({ ...form, loanType: e.target.value })}
+                          onChange={(e) =>
+                            setForm({ ...form, loanType: e.target.value })
+                          }
                           className="input-luxury bg-white"
                         >
                           <option value="">Select loan type</option>
@@ -228,11 +268,20 @@ export default function ContactPageContent() {
                       <textarea
                         rows={5}
                         value={form.message}
-                        onChange={(e) => setForm({ ...form, message: e.target.value })}
+                        onChange={(e) =>
+                          setForm({ ...form, message: e.target.value })
+                        }
                         className="input-luxury resize-none"
                         placeholder="Tell us about your situation and goals..."
                       />
                     </div>
+
+                    {submitError && (
+                      <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 text-red-700">
+                        <AlertCircle size={16} className="flex-shrink-0" />
+                        <p className="font-inter text-sm">{submitError}</p>
+                      </div>
+                    )}
 
                     <button
                       type="submit"
@@ -250,7 +299,8 @@ export default function ContactPageContent() {
                     </button>
 
                     <p className="font-inter text-xs text-charcoal/40 text-center">
-                      By submitting, you agree to our Privacy Policy. We'll never share your details.
+                      By submitting, you agree to our Privacy Policy. We'll
+                      never share your details.
                     </p>
                   </form>
                 )}

@@ -60,7 +60,7 @@ export default function HeroSection() {
           >
             <div className="w-12 h-px bg-gold" />
             <p className="font-inter text-xs tracking-[0.3em] uppercase text-gold">
-              Australian Mortgage Brokers
+              Brisbane Mortgage Brokers
             </p>
           </motion.div>
 
@@ -89,7 +89,7 @@ export default function HeroSection() {
             transition={{ duration: 0.7, delay: 0.3 }}
             className="text-charcoal/60 font-inter text-lg md:text-xl leading-relaxed mb-12 max-w-xl"
           >
-            Secure smarter home loans whilst enjoying the experience. Trust, relationships and empowerment are the foundations of our company. We are with you.
+            Secure smarter home loans whilst enjoying the experience. Brisbane&apos;s trusted mortgage brokers — built on trust, relationships, and empowerment. We are with you.
           </motion.p>
 
           <motion.div

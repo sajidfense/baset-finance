@@ -9,9 +9,18 @@ import LenderLogos from "@/components/home/LenderLogos";
 import CTABanner from "@/components/CTABanner";
 
 export const metadata: Metadata = {
-  title: "Baset Finance | Mortgage Brokers For The People",
+  title: "Brisbane Mortgage Broker | Home Loans & Refinancing — Baset Finance",
   description:
-    "Trusted Australian mortgage brokers helping our people secure smarter home loans with transparent advice and better lending solutions. Access 40+ lenders.",
+    "Baset Finance is a trusted Brisbane mortgage broker offering home loans, refinancing, investment lending, and first home buyer support. Compare 40+ lenders with a free consultation. Serving Brisbane, Gold Coast & Australia wide.",
+  alternates: {
+    canonical: "https://basetfinance.com.au",
+  },
+  openGraph: {
+    title: "Brisbane Mortgage Broker | Home Loans & Refinancing — Baset Finance",
+    description:
+      "Trusted Brisbane mortgage broker helping Australians secure smarter home loans. Compare 40+ lenders with free, transparent advice.",
+    url: "https://basetfinance.com.au",
+  },
 };
 
 export default function HomePage() {

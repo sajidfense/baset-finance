@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import PageHero from "@/components/PageHero";
+import { submitToSheet } from "@/lib/submitToSheet";
 import {
   DollarSign,
   Users,
@@ -19,28 +20,33 @@ import {
   ChevronUp,
   Calculator,
   TrendingUp,
+  AlertCircle,
 } from "lucide-react";
 
 const benefits = [
   {
     icon: <DollarSign size={28} />,
     title: "25% Upfront Commission",
-    description: "Earn 25% of the upfront commission for every person who settles a loan through your referral. No cap on earnings.",
+    description:
+      "Earn 25% of the upfront commission for every person who settles a loan through your referral. No cap on earnings.",
   },
   {
     icon: <Zap size={28} />,
     title: "Simple Referral Process",
-    description: "Just provide a name and contact number. We handle everything from there — no paperwork, no hassle for you.",
+    description:
+      "Just provide a name and contact number. We handle everything from there — no paperwork, no hassle for you.",
   },
   {
     icon: <Wallet size={28} />,
     title: "Fast Payouts",
-    description: "Commissions are paid promptly upon loan settlement, typically within 30 days. Direct to your nominated account.",
+    description:
+      "Commissions are paid promptly upon loan settlement, typically within 30 days. Direct to your nominated account.",
   },
   {
     icon: <BarChart2 size={28} />,
     title: "Transparent Tracking",
-    description: "Know exactly where every referral stands. We keep you updated throughout the process.",
+    description:
+      "Know exactly where every referral stands. We keep you updated throughout the process.",
   },
 ];
 
@@ -49,25 +55,29 @@ const steps = [
     number: "01",
     icon: <UserPlus size={20} />,
     title: "Sign Up",
-    description: "Complete the referrer registration form below. We'll review your details and send your welcome pack within 24 hours.",
+    description:
+      "Complete the referrer registration form below. We'll review your details and send your welcome pack within 24 hours.",
   },
   {
     number: "02",
     icon: <Users size={20} />,
     title: "Refer Someone",
-    description: "When you meet someone who needs a home loan, simply provide us their name and contact number via phone, email, or our referral portal.",
+    description:
+      "When you meet someone who needs a home loan, simply provide us their name and contact number via phone, email, or our referral portal.",
   },
   {
     number: "03",
     icon: <Home size={20} />,
     title: "Loan Settles",
-    description: "We take care of everything — assessment, application, approval, and settlement. You stay informed along the way.",
+    description:
+      "We take care of everything — assessment, application, approval, and settlement. You stay informed along the way.",
   },
   {
     number: "04",
     icon: <Wallet size={20} />,
     title: "You Get Paid",
-    description: "Once the loan settles, your commission is calculated and paid within 30 days. Simple, transparent, reliable.",
+    description:
+      "Once the loan settles, your commission is calculated and paid within 30 days. Simple, transparent, reliable.",
   },
 ];
 
@@ -108,13 +118,35 @@ function formatCurrency(value: number): string {
   }).format(value);
 }
 
-// Commission Calculator Component
-function CommissionCalculator() {
-  const [loanAmount, setLoanAmount] = useState("1000000");
+// ─── Enhanced Earnings Calculator ───
+function EarningsCalculator() {
+  const [referrals, setReferrals] = useState("5");
+  const [conversionRate, setConversionRate] = useState("60");
+  const [avgLoanAmount, setAvgLoanAmount] = useState("600000");
 
-  const loan = parseFloat(loanAmount) || 0;
-  const upfrontCommission = loan * 0.0065; // 0.65%
-  const referrerCommission = upfrontCommission * 0.25; // 25% of upfront
+  const results = useMemo(() => {
+    const numReferrals = parseInt(referrals) || 0;
+    const rate = parseFloat(conversionRate) || 0;
+    const avgLoan = parseFloat(avgLoanAmount) || 0;
+
+    if (numReferrals <= 0 || rate <= 0 || avgLoan <= 0)
+      return null;
+
+    const settledClients = Math.round(numReferrals * (rate / 100));
+    const upfrontPerLoan = avgLoan * 0.0065; // 0.65% upfront commission
+    const earningsPerSettlement = upfrontPerLoan * 0.25; // 25% referrer share
+    const totalEarnings = settledClients * earningsPerSettlement;
+    const monthlyProjection = totalEarnings;
+    const annualProjection = totalEarnings * 12;
+
+    return {
+      settledClients,
+      earningsPerSettlement,
+      totalEarnings,
+      monthlyProjection,
+      annualProjection,
+    };
+  }, [referrals, conversionRate, avgLoanAmount]);
 
   return (
     <div className="bg-charcoal p-8 relative">
@@ -124,54 +156,131 @@ function CommissionCalculator() {
       <div className="flex items-center gap-3 mb-6">
         <Calculator size={20} className="text-gold" />
         <h3 className="font-playfair text-xl font-semibold text-white">
-          Commission Calculator
+          Earnings Calculator
         </h3>
       </div>
 
       <p className="font-inter text-sm text-white/50 mb-6">
-        See how much you could earn per referral. In the mortgage industry, the average upfront commission is 0.65% of the loan amount. You receive 25% of that.
+        Estimate your potential earnings based on how many people you refer each
+        month.
       </p>
 
-      <div className="mb-6">
-        <label className="block font-inter text-xs uppercase tracking-wider text-gold mb-2">
-          Loan Amount
-        </label>
-        <div className="relative">
-          <span className="absolute left-4 top-1/2 -translate-y-1/2 font-inter text-sm text-white/40">$</span>
+      <div className="space-y-5 mb-6">
+        <div>
+          <label className="block font-inter text-xs uppercase tracking-wider text-gold mb-2">
+            Referrals Per Month
+          </label>
           <input
             type="number"
-            value={loanAmount}
-            onChange={(e) => setLoanAmount(e.target.value)}
-            className="w-full px-4 py-3.5 bg-white/5 border border-white/10 text-white font-inter text-sm focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/30 transition-all duration-200 placeholder:text-white/30 pl-8"
-            placeholder="1000000"
-            min="50000"
+            value={referrals}
+            onChange={(e) => setReferrals(e.target.value)}
+            className="w-full px-4 py-3.5 bg-white/5 border border-white/10 text-white font-inter text-sm focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/30 transition-all duration-200 placeholder:text-white/30"
+            placeholder="5"
+            min="1"
           />
         </div>
+
+        <div>
+          <label className="block font-inter text-xs uppercase tracking-wider text-gold mb-2">
+            Estimated Conversion Rate
+          </label>
+          <div className="relative">
+            <input
+              type="number"
+              value={conversionRate}
+              onChange={(e) => setConversionRate(e.target.value)}
+              className="w-full px-4 py-3.5 bg-white/5 border border-white/10 text-white font-inter text-sm focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/30 transition-all duration-200 placeholder:text-white/30 pr-12"
+              placeholder="60"
+              min="1"
+              max="100"
+            />
+            <span className="absolute right-4 top-1/2 -translate-y-1/2 font-inter text-sm text-white/40">
+              %
+            </span>
+          </div>
+        </div>
+
+        <div>
+          <label className="block font-inter text-xs uppercase tracking-wider text-gold mb-2">
+            Average Loan Amount
+          </label>
+          <div className="relative">
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 font-inter text-sm text-white/40">
+              $
+            </span>
+            <input
+              type="number"
+              value={avgLoanAmount}
+              onChange={(e) => setAvgLoanAmount(e.target.value)}
+              className="w-full px-4 py-3.5 bg-white/5 border border-white/10 text-white font-inter text-sm focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/30 transition-all duration-200 placeholder:text-white/30 pl-8"
+              placeholder="600000"
+              min="50000"
+            />
+          </div>
+        </div>
       </div>
 
-      <div className="space-y-4">
-        <div className="flex justify-between items-center py-3 border-b border-white/10">
-          <span className="font-inter text-sm text-white/50">Loan Amount</span>
-          <span className="font-playfair text-lg text-white font-semibold">{formatCurrency(loan)}</span>
-        </div>
-        <div className="flex justify-between items-center py-3 border-b border-white/10">
-          <span className="font-inter text-sm text-white/50">Upfront Commission (0.65%)</span>
-          <span className="font-inter text-sm text-white/60">{formatCurrency(upfrontCommission)}</span>
-        </div>
-        <div className="flex justify-between items-center py-3">
-          <span className="font-inter text-sm text-gold font-semibold">Your Referral Earnings (25%)</span>
-          <span className="font-playfair text-2xl text-gold font-semibold">{formatCurrency(referrerCommission)}</span>
-        </div>
-      </div>
+      {results ? (
+        <div className="space-y-4">
+          <div className="space-y-3 border-t border-white/10 pt-4">
+            <div className="flex justify-between items-center py-2">
+              <span className="font-inter text-sm text-white/50">
+                Settled Clients / Month
+              </span>
+              <span className="font-playfair text-lg text-white font-semibold">
+                {results.settledClients}
+              </span>
+            </div>
+            <div className="flex justify-between items-center py-2 border-b border-white/10">
+              <span className="font-inter text-sm text-white/50">
+                Commission per Settlement
+              </span>
+              <span className="font-inter text-sm text-white/60">
+                {formatCurrency(results.earningsPerSettlement)}
+              </span>
+            </div>
+            <div className="flex justify-between items-center py-2">
+              <span className="font-inter text-sm text-gold font-semibold">
+                Monthly Earnings
+              </span>
+              <span className="font-playfair text-2xl text-gold font-semibold">
+                {formatCurrency(results.monthlyProjection)}
+              </span>
+            </div>
+            <div className="flex justify-between items-center py-2 border-t border-white/10">
+              <span className="font-inter text-sm text-white/50">
+                Annual Projection
+              </span>
+              <span className="font-playfair text-xl text-white font-semibold">
+                {formatCurrency(results.annualProjection)}
+              </span>
+            </div>
+          </div>
 
-      <div className="mt-6 p-4 bg-gold/10 border border-gold/20">
-        <div className="flex items-start gap-3">
-          <TrendingUp size={16} className="text-gold mt-0.5 flex-shrink-0" />
-          <p className="font-inter text-xs text-white/60 leading-relaxed">
-            The more you refer, the more you earn. There is no cap on earnings. <span className="text-gold">The upfront commission percentage will be increased even more soon — get in early!</span>
+          <div className="p-4 bg-gold/10 border border-gold/20">
+            <div className="flex items-start gap-3">
+              <TrendingUp
+                size={16}
+                className="text-gold mt-0.5 flex-shrink-0"
+              />
+              <p className="font-inter text-xs text-white/60 leading-relaxed">
+                The more you refer, the more you earn. There is no cap on
+                earnings.{" "}
+                <span className="text-gold">
+                  The upfront commission percentage will be increased even more
+                  soon — get in early!
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="text-center py-4">
+          <p className="font-inter text-sm text-white/40 italic">
+            Enter your estimates above to see projected earnings.
           </p>
         </div>
-      </div>
+      )}
     </div>
   );
 }
@@ -208,7 +317,8 @@ function ReferrerDashboard() {
       </div>
 
       <p className="font-inter text-sm text-charcoal/50 text-center">
-        Your personalised referrer dashboard will be available once you've signed up and had your first referral processed.
+        Your personalised referrer dashboard will be available once you've signed
+        up and had your first referral processed.
       </p>
     </div>
   );
@@ -218,6 +328,7 @@ export default function ReferrerProgramContent() {
   const [form, setForm] = useState<FormData>(defaultForm);
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const [showDashboard, setShowDashboard] = useState(false);
 
   const update = <K extends keyof FormData>(field: K, value: FormData[K]) =>
@@ -227,9 +338,24 @@ export default function ReferrerProgramContent() {
     e.preventDefault();
     if (!form.agreedToTerms) return;
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 1200));
+    setSubmitError("");
+
+    const result = await submitToSheet({
+      name: form.name,
+      email: form.email,
+      phone: form.phone,
+      loan: `Referrer — ${form.referralType}`,
+      message: form.company ? `Company: ${form.company}` : "No company provided",
+    });
+
     setLoading(false);
-    setSubmitted(true);
+    if (result.success) {
+      setSubmitted(true);
+    } else {
+      setSubmitError(
+        result.error || "Something went wrong. Please try again."
+      );
+    }
   };
 
   return (
@@ -259,7 +385,9 @@ export default function ReferrerProgramContent() {
             </h2>
             <div className="w-14 h-px bg-gold mx-auto mb-5" />
             <p className="text-charcoal/60 font-inter max-w-xl mx-auto">
-              Our referrer program is built to reward anyone who trusts us with their referrals. We make it simple, transparent, and genuinely worthwhile. Our people love us as we love them.
+              Our referrer program is built to reward anyone who trusts us with
+              their referrals. We make it simple, transparent, and genuinely
+              worthwhile. Our people love us as we love them.
             </p>
           </motion.div>
 
@@ -290,10 +418,10 @@ export default function ReferrerProgramContent() {
         </div>
       </section>
 
-      {/* Commission Calculator */}
-      <section className="section-padding marble-bg">
+      {/* Earnings Calculator — embedded, no redirect */}
+      <section className="section-padding marble-bg" id="earnings">
         <div className="container-luxury">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -309,25 +437,47 @@ export default function ReferrerProgramContent() {
               <div className="w-14 h-px bg-gold mb-6" />
               <div className="space-y-4 text-charcoal/70 font-inter text-sm leading-relaxed">
                 <p>
-                  When you refer someone who settles a home loan through Baset Finance, you earn <strong className="text-charcoal">25% of the upfront commission</strong> that we receive from the lender.
+                  When you refer someone who settles a home loan through Baset
+                  Finance, you earn{" "}
+                  <strong className="text-charcoal">
+                    25% of the upfront commission
+                  </strong>{" "}
+                  that we receive from the lender.
                 </p>
                 <p>
-                  In the mortgage industry, the average upfront commission is <strong className="text-charcoal">0.65% of the loan amount</strong>. Use the calculator to see exactly what you could earn.
+                  In the mortgage industry, the average upfront commission is{" "}
+                  <strong className="text-charcoal">
+                    0.65% of the loan amount
+                  </strong>
+                  . Use the calculator to see exactly what you could earn based
+                  on your referral volume.
                 </p>
                 <div className="bg-white border border-marble-300 p-5 mt-4">
-                  <p className="font-inter text-xs text-charcoal/50 uppercase tracking-wider mb-3">Example</p>
+                  <p className="font-inter text-xs text-charcoal/50 uppercase tracking-wider mb-3">
+                    Example
+                  </p>
                   <div className="space-y-2 font-inter text-sm">
                     <div className="flex justify-between">
-                      <span className="text-charcoal/60">Loan amount referred</span>
-                      <span className="font-semibold text-charcoal">$1,000,000</span>
+                      <span className="text-charcoal/60">
+                        Loan amount referred
+                      </span>
+                      <span className="font-semibold text-charcoal">
+                        $1,000,000
+                      </span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-charcoal/60">Upfront commission (0.65%)</span>
+                      <span className="text-charcoal/60">
+                        Upfront commission (0.65%)
+                      </span>
                       <span className="text-charcoal/60">$6,500</span>
                     </div>
                     <div className="flex justify-between pt-2 border-t border-marble-300">
-                      <span className="font-semibold text-gold">You receive (25%)</span>
-                      <span className="font-playfair text-xl font-semibold text-gold">$1,625</span>
+                      <span className="font-semibold text-gold">
+                        You receive (25%)
+                      </span>
+                      <span className="font-playfair text-xl font-semibold text-gold">
+                        $1,625
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -340,7 +490,7 @@ export default function ReferrerProgramContent() {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.1 }}
             >
-              <CommissionCalculator />
+              <EarningsCalculator />
             </motion.div>
           </div>
         </div>
@@ -386,7 +536,9 @@ export default function ReferrerProgramContent() {
                       {step.icon}
                     </div>
                   </div>
-                  <div className="font-playfair text-xs text-gold/50 mb-2">{step.number}</div>
+                  <div className="font-playfair text-xs text-gold/50 mb-2">
+                    {step.number}
+                  </div>
                   <h3 className="font-playfair text-lg font-semibold text-charcoal mb-2">
                     {step.title}
                   </h3>
@@ -421,7 +573,9 @@ export default function ReferrerProgramContent() {
                 </h2>
                 <div className="w-12 h-px bg-gold mb-6" />
                 <p className="font-inter text-sm text-charcoal/60 leading-relaxed mb-8">
-                  Complete the form and we'll have you set up within 24 hours. Our partner team will be in touch to confirm your onboarding and answer any questions about the program.
+                  Complete the form and we'll have you set up within 24 hours.
+                  Our partner team will be in touch to confirm your onboarding
+                  and answer any questions about the program.
                 </p>
 
                 {/* Open to everyone */}
@@ -430,7 +584,13 @@ export default function ReferrerProgramContent() {
                     Open to All Australian Citizens
                   </p>
                   <p className="font-inter text-sm text-charcoal/60 leading-relaxed">
-                    You don't need to be a professional to join our referral program. <strong className="text-charcoal">Any Australian citizen</strong> can sign up and start earning commission by referring friends, family, or colleagues.
+                    You don't need to be a professional to join our referral
+                    program.{" "}
+                    <strong className="text-charcoal">
+                      Any Australian citizen
+                    </strong>{" "}
+                    can sign up and start earning commission by referring friends,
+                    family, or colleagues.
                   </p>
                 </div>
 
@@ -449,8 +609,19 @@ export default function ReferrerProgramContent() {
                     "Business Owners",
                   ].map((type) => (
                     <div key={type} className="flex items-center gap-3">
-                      <CheckCircle size={14} className="text-gold flex-shrink-0" />
-                      <span className={`font-inter text-sm ${type === "Any Australian Citizen" ? "text-gold font-semibold" : "text-charcoal/70"}`}>{type}</span>
+                      <CheckCircle
+                        size={14}
+                        className="text-gold flex-shrink-0"
+                      />
+                      <span
+                        className={`font-inter text-sm ${
+                          type === "Any Australian Citizen"
+                            ? "text-gold font-semibold"
+                            : "text-charcoal/70"
+                        }`}
+                      >
+                        {type}
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -475,11 +646,15 @@ export default function ReferrerProgramContent() {
                     </h3>
                     <div className="w-10 h-px bg-gold mx-auto mb-4" />
                     <p className="font-inter text-sm text-charcoal/60 max-w-sm">
-                      Welcome to the Baset Finance partner network. Our team will reach out within 24 hours to complete your onboarding.
+                      Welcome to the Baset Finance partner network. Our team will
+                      reach out within 24 hours to complete your onboarding.
                     </p>
                   </div>
                 ) : (
-                  <form onSubmit={handleSubmit} className="space-y-5 bg-white border border-marble-300 p-8">
+                  <form
+                    onSubmit={handleSubmit}
+                    className="space-y-5 bg-white border border-marble-300 p-8"
+                  >
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                       <div>
                         <label className="block font-inter text-xs uppercase tracking-wider text-charcoal/60 mb-2">
@@ -544,7 +719,9 @@ export default function ReferrerProgramContent() {
                       <select
                         required
                         value={form.referralType}
-                        onChange={(e) => update("referralType", e.target.value)}
+                        onChange={(e) =>
+                          update("referralType", e.target.value)
+                        }
                         className="input-luxury bg-white"
                       >
                         <option value="">Select your background</option>
@@ -562,7 +739,9 @@ export default function ReferrerProgramContent() {
                           <input
                             type="checkbox"
                             checked={form.agreedToTerms}
-                            onChange={(e) => update("agreedToTerms", e.target.checked)}
+                            onChange={(e) =>
+                              update("agreedToTerms", e.target.checked)
+                            }
                             className="sr-only"
                             required
                           />
@@ -583,10 +762,18 @@ export default function ReferrerProgramContent() {
                           <Link href="#" className="text-gold hover:underline">
                             Referrer Terms & Conditions
                           </Link>{" "}
-                          and understand the commission structure. <span className="text-gold">*</span>
+                          and understand the commission structure.{" "}
+                          <span className="text-gold">*</span>
                         </span>
                       </label>
                     </div>
+
+                    {submitError && (
+                      <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 text-red-700">
+                        <AlertCircle size={16} className="flex-shrink-0" />
+                        <p className="font-inter text-sm">{submitError}</p>
+                      </div>
+                    )}
 
                     <button
                       type="submit"
@@ -604,7 +791,8 @@ export default function ReferrerProgramContent() {
                     </button>
 
                     <p className="font-inter text-xs text-charcoal/40 text-center">
-                      By submitting, you agree to our Privacy Policy. Your information is kept confidential.
+                      By submitting, you agree to our Privacy Policy. Your
+                      information is kept confidential.
                     </p>
                   </form>
                 )}
@@ -631,7 +819,11 @@ export default function ReferrerProgramContent() {
               className="flex items-center gap-2 text-sm font-inter text-gold hover:text-gold-dark transition-colors"
             >
               {showDashboard ? "Hide" : "Preview"}
-              {showDashboard ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+              {showDashboard ? (
+                <ChevronUp size={16} />
+              ) : (
+                <ChevronDown size={16} />
+              )}
             </button>
           </div>
 

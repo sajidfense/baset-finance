@@ -150,12 +150,14 @@ const defaultRefinance: RefinanceInputs = {
 
 function calcRefinance(d: RefinanceInputs) {
   const P = parseFloat(d.currentBalance) || 0;
-  const curRate = parseFloat(d.currentRate) / 100 || 0;
+  const curRateRaw = parseFloat(d.currentRate);
   const curTerm = parseInt(d.remainingTerm) || 25;
-  const newRate = parseFloat(d.newRate) / 100 || 0;
+  const newRateRaw = parseFloat(d.newRate);
   const newTerm = parseInt(d.newTerm) || 25;
-  if (P <= 0 || curRate <= 0 || newRate <= 0) return null;
+  if (P <= 0 || isNaN(curRateRaw) || curRateRaw <= 0 || isNaN(newRateRaw) || newRateRaw <= 0) return null;
 
+  const curRate = curRateRaw / 100;
+  const newRate = newRateRaw / 100;
   const curR = curRate / 12;
   const curN = curTerm * 12;
   const curMonthly = (P * curR * Math.pow(1 + curR, curN)) / (Math.pow(1 + curR, curN) - 1);
@@ -163,6 +165,8 @@ function calcRefinance(d: RefinanceInputs) {
   const newR = newRate / 12;
   const newN = newTerm * 12;
   const newMonthly = (P * newR * Math.pow(1 + newR, newN)) / (Math.pow(1 + newR, newN) - 1);
+
+  if (!isFinite(curMonthly) || !isFinite(newMonthly)) return null;
 
   const monthlySaving = curMonthly - newMonthly;
   const totalCurrentCost = curMonthly * curN;

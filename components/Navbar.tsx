@@ -23,10 +23,9 @@ const navLinks = [
     label: "Calculators",
     href: "/calculators",
     children: [
-      { label: "Borrowing Capacity", href: "/calculators" },
-      { label: "Loan Repayment", href: "/calculators" },
-      { label: "Purchase Costs", href: "/calculators" },
-      { label: "Refinance", href: "/calculators" },
+      { label: "Borrowing Capacity", href: "/calculators/borrowing-capacity" },
+      { label: "Loan Repayment", href: "/calculators/loan-repayment" },
+      { label: "All Calculators", href: "/calculators" },
     ],
   },
   { label: "Referrer Program", href: "/referrer-program" },
@@ -59,7 +58,7 @@ export default function Navbar() {
             <div className="relative w-8 h-8">
               <Image
                 src="/logo2.PNG"
-                alt="Baset Finance"
+                alt="Baset Finance — Brisbane mortgage broker logo"
                 fill
                 className="object-contain"
                 priority

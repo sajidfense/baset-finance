@@ -54,10 +54,11 @@ export default function LenderLogos() {
                   <div className="relative w-full h-12 flex items-center justify-center">
                     <Image
                       src={lender.logo}
-                      alt={lender.name}
+                      alt={`${lender.name} — Baset Finance lender partner`}
                       width={120}
                       height={48}
                       className="object-contain max-h-12 w-auto"
+                      loading="lazy"
                     />
                   </div>
                   <span className="font-inter text-[10px] text-charcoal/40 mt-2 whitespace-nowrap tracking-wide">
