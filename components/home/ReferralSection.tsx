@@ -61,14 +61,14 @@ export default function ReferralSection() {
           className="text-center mb-12"
         >
           <p className="font-inter text-xs tracking-[0.25em] uppercase text-gold mb-4">
-            Partner Program
+            Refer &amp; Earn
           </p>
           <h2 className="font-playfair text-3xl md:text-4xl lg:text-5xl text-white font-semibold mb-4">
             Earn With Every Referral
           </h2>
           <div className="w-14 h-px bg-gold mx-auto mb-5" />
           <p className="text-white/50 font-inter max-w-2xl mx-auto leading-relaxed">
-            Join the Baset Finance partner program and earn generous commissions by
+            Join Baset Finance Refer &amp; Earn and receive generous commissions by
             referring people who need home loans. Simple, transparent, and rewarding —
             open to all Australian citizens.
           </p>
@@ -162,7 +162,7 @@ export default function ReferralSection() {
           className="text-center"
         >
           <Link href="/referrer-program" className="btn-gold">
-            Join the Partner Program
+            Join Refer &amp; Earn
             <ArrowRight size={16} />
           </Link>
           <p className="font-inter text-xs text-white/30 mt-4">

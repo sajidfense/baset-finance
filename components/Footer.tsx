@@ -87,7 +87,7 @@ export default function Footer() {
                 { label: "Borrowing Calculator", href: "/calculators/borrowing-capacity" },
                 { label: "Repayment Calculator", href: "/calculators/loan-repayment" },
                 { label: "All Calculators", href: "/calculators" },
-                { label: "Referrer Program", href: "/referrer-program" },
+                { label: "Refer & Earn", href: "/referrer-program" },
                 { label: "Contact", href: "/contact" },
               ].map((item) => (
                 <li key={item.label}>

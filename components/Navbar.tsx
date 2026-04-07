@@ -28,7 +28,7 @@ const navLinks = [
       { label: "All Calculators", href: "/calculators" },
     ],
   },
-  { label: "Referrer Program", href: "/referrer-program" },
+  { label: "Refer & Earn", href: "/referrer-program" },
   { label: "Contact", href: "/contact" },
 ];
 

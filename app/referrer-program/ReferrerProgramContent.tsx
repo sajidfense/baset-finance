@@ -56,7 +56,7 @@ const steps = [
     icon: <UserPlus size={20} />,
     title: "Sign Up",
     description:
-      "Complete the referrer registration form below. We'll review your details and send your welcome pack within 24 hours.",
+      "Complete the Refer & Earn registration form below. We'll review your details and send your welcome pack within 24 hours.",
   },
   {
     number: "02",
@@ -292,7 +292,7 @@ function ReferrerDashboard() {
       <div className="flex items-center gap-3 mb-6">
         <BarChart2 size={20} className="text-gold" />
         <h3 className="font-playfair text-xl font-semibold text-charcoal">
-          Referrer Dashboard
+          Refer &amp; Earn Dashboard
         </h3>
         <span className="ml-auto px-3 py-1 bg-gold/10 text-gold text-xs font-inter tracking-wider uppercase">
           Coming Soon
@@ -317,8 +317,8 @@ function ReferrerDashboard() {
       </div>
 
       <p className="font-inter text-sm text-charcoal/50 text-center">
-        Your personalised referrer dashboard will be available once you've signed
-        up and had your first referral processed.
+        Your personalised Refer &amp; Earn dashboard will be available once you've
+        signed up and had your first referral processed.
       </p>
     </div>
   );
@@ -361,10 +361,10 @@ export default function ReferrerProgramContent() {
   return (
     <>
       <PageHero
-        eyebrow="Partner Program"
-        title="Partner With Baset Finance"
-        subtitle="Earn commission by referring people who need home loans. A simple, transparent, and rewarding partnership — open to any Australian citizen."
-        breadcrumb={[{ label: "Referrer Program", href: "/referrer-program" }]}
+        eyebrow="Refer & Earn"
+        title="Refer & Earn With Baset Finance"
+        subtitle="Earn commission by referring people who need home loans. A simple, transparent, and rewarding way to share Baset Finance — open to any Australian citizen."
+        breadcrumb={[{ label: "Refer & Earn", href: "/referrer-program" }]}
       />
 
       {/* Benefits */}
@@ -378,16 +378,16 @@ export default function ReferrerProgramContent() {
             className="text-center mb-14"
           >
             <p className="font-inter text-xs tracking-[0.25em] uppercase text-gold mb-4">
-              Partner Benefits
+              Why Refer &amp; Earn?
             </p>
             <h2 className="font-playfair text-3xl md:text-4xl font-semibold text-charcoal mb-4">
-              Why Partner With Us?
+              The Benefits of Refer &amp; Earn
             </h2>
             <div className="w-14 h-px bg-gold mx-auto mb-5" />
             <p className="text-charcoal/60 font-inter max-w-xl mx-auto">
-              Our referrer program is built to reward anyone who trusts us with
-              their referrals. We make it simple, transparent, and genuinely
-              worthwhile. Our people love us as we love them.
+              Refer &amp; Earn is built to reward anyone who trusts us with their
+              referrals. We make it simple, transparent, and genuinely worthwhile.
+              Our people love us as we love them.
             </p>
           </motion.div>
 
@@ -566,16 +566,16 @@ export default function ReferrerProgramContent() {
                 transition={{ duration: 0.6 }}
               >
                 <p className="font-inter text-xs tracking-[0.25em] uppercase text-gold mb-4">
-                  Join The Program
+                  Join Refer &amp; Earn
                 </p>
                 <h2 className="font-playfair text-3xl font-semibold text-charcoal mb-5">
-                  Sign Up as a Referrer
+                  Sign Up to Refer &amp; Earn
                 </h2>
                 <div className="w-12 h-px bg-gold mb-6" />
                 <p className="font-inter text-sm text-charcoal/60 leading-relaxed mb-8">
                   Complete the form and we'll have you set up within 24 hours.
-                  Our partner team will be in touch to confirm your onboarding
-                  and answer any questions about the program.
+                  Our team will be in touch to confirm your onboarding and answer
+                  any questions about Refer &amp; Earn.
                 </p>
 
                 {/* Open to everyone */}
@@ -646,8 +646,8 @@ export default function ReferrerProgramContent() {
                     </h3>
                     <div className="w-10 h-px bg-gold mx-auto mb-4" />
                     <p className="font-inter text-sm text-charcoal/60 max-w-sm">
-                      Welcome to the Baset Finance partner network. Our team will
-                      reach out within 24 hours to complete your onboarding.
+                      Welcome to Baset Finance Refer &amp; Earn. Our team will reach
+                      out within 24 hours to complete your onboarding.
                     </p>
                   </div>
                 ) : (
@@ -760,7 +760,7 @@ export default function ReferrerProgramContent() {
                         <span className="font-inter text-sm text-charcoal/60">
                           I agree to the{" "}
                           <Link href="#" className="text-gold hover:underline">
-                            Referrer Terms & Conditions
+                            Refer &amp; Earn Terms &amp; Conditions
                           </Link>{" "}
                           and understand the commission structure.{" "}
                           <span className="text-gold">*</span>
@@ -808,10 +808,10 @@ export default function ReferrerProgramContent() {
           <div className="flex items-center justify-between mb-8">
             <div>
               <p className="font-inter text-xs tracking-[0.25em] uppercase text-gold mb-2">
-                Partner Portal
+                Member Portal
               </p>
               <h2 className="font-playfair text-2xl font-semibold text-charcoal">
-                Referrer Dashboard
+                Refer &amp; Earn Dashboard
               </h2>
             </div>
             <button
