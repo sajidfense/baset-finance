@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import HeroSection from "@/components/home/HeroSection";
 import TrustSection from "@/components/home/TrustSection";
 import ServicesSection from "@/components/home/ServicesSection";
-import CalculatorSection from "@/components/home/CalculatorSection";
+import ReferralSection from "@/components/home/ReferralSection";
 import ProcessSection from "@/components/home/ProcessSection";
 import TestimonialsSection from "@/components/home/TestimonialsSection";
 import LenderLogos from "@/components/home/LenderLogos";
@@ -30,7 +30,7 @@ export default function HomePage() {
       <TrustSection />
       <ServicesSection />
       <ProcessSection />
-      <CalculatorSection />
+      <ReferralSection />
       <LenderLogos />
       <TestimonialsSection />
       <CTABanner />
