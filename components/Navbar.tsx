@@ -17,6 +17,7 @@ const navLinks = [
       { label: "Refinancing", href: "/refinancing" },
       { label: "Investment Loans", href: "/investment-loans" },
       { label: "Commercial", href: "/services#commercial" },
+      { label: "Construction", href: "/services#construction" },
     ],
   },
   {

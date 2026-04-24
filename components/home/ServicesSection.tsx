@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Home, RefreshCw, TrendingUp, Key, Building2, ArrowRight } from "lucide-react";
+import { Home, RefreshCw, TrendingUp, Key, Building2, HardHat, ArrowRight } from "lucide-react";
 
 const services = [
   {
@@ -44,6 +44,14 @@ const services = [
       "Financing for commercial properties, business premises, and mixed-use developments tailored to your business needs.",
     href: "/services#commercial",
     features: ["Commercial property", "Business premises", "Specialist lenders"],
+  },
+  {
+    icon: <HardHat size={28} />,
+    title: "Construction",
+    description:
+      "Build with confidence using progressive drawdown finance structured around your builder contract and milestones.",
+    href: "/services#construction",
+    features: ["Progressive drawdowns", "Builder contracts", "Interest-only build phase"],
   },
 ];
 
