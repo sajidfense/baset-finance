@@ -297,12 +297,12 @@ export default function LoanRepaymentCalculator() {
                           Loan Amount *
                         </label>
                         <div className="relative">
-                          <span className="absolute left-4 top-1/2 -translate-y-1/2 font-inter text-sm text-charcoal/50">$</span>
+                          <span className="absolute left-4 top-1/2 -translate-y-1/2 font-inter text-sm text-charcoal/50 pointer-events-none">$</span>
                           <input
                             type="number"
                             value={inputs.loanAmount}
                             onChange={(e) => update("loanAmount")(e.target.value)}
-                            className="input-luxury pl-8"
+                            className="input-luxury !pl-10"
                             placeholder="500000"
                             min="10000"
                             required
@@ -319,14 +319,14 @@ export default function LoanRepaymentCalculator() {
                             type="number"
                             value={inputs.interestRate}
                             onChange={(e) => update("interestRate")(e.target.value)}
-                            className="input-luxury pr-12"
+                            className="input-luxury !pr-12"
                             placeholder="6.50"
                             min="0.1"
                             max="20"
                             step="0.05"
                             required
                           />
-                          <span className="absolute right-4 top-1/2 -translate-y-1/2 font-inter text-sm text-charcoal/50">%</span>
+                          <span className="absolute right-4 top-1/2 -translate-y-1/2 font-inter text-sm text-charcoal/50 pointer-events-none">%</span>
                         </div>
                       </div>
 
@@ -339,13 +339,13 @@ export default function LoanRepaymentCalculator() {
                             type="number"
                             value={inputs.loanTerm}
                             onChange={(e) => update("loanTerm")(e.target.value)}
-                            className="input-luxury pr-16"
+                            className="input-luxury !pr-16"
                             placeholder="30"
                             min="1"
                             max="30"
                             required
                           />
-                          <span className="absolute right-4 top-1/2 -translate-y-1/2 font-inter text-sm text-charcoal/50">years</span>
+                          <span className="absolute right-4 top-1/2 -translate-y-1/2 font-inter text-sm text-charcoal/50 pointer-events-none">years</span>
                         </div>
                       </div>
 
@@ -396,7 +396,7 @@ export default function LoanRepaymentCalculator() {
                           <p className="font-inter text-xs tracking-[0.2em] uppercase text-gold mb-2">
                             {inputs.frequency.charAt(0).toUpperCase() + inputs.frequency.slice(1)} Repayment
                           </p>
-                          <div className="font-playfair text-5xl font-semibold text-white mt-2 mb-1">
+                          <div className="font-playfair text-4xl md:text-5xl font-semibold text-white mt-2 mb-1 tabular-nums tracking-tight leading-none break-words">
                             {formatCurrency(displayed.repayment)}
                           </div>
                           <p className="font-inter text-xs text-white/40">
@@ -405,17 +405,17 @@ export default function LoanRepaymentCalculator() {
                         </div>
 
                         {/* Breakdown */}
-                        <div className="grid grid-cols-3 gap-px bg-marble-300">
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-px bg-marble-300">
                           {[
                             { label: "Loan Amount", value: formatCurrency(parseFloat(inputs.loanAmount) || 0) },
                             { label: "Total Interest", value: formatCurrency(displayed.totalInterest) },
                             { label: "Total Repaid", value: formatCurrency(displayed.totalRepaid) },
                           ].map((item) => (
                             <div key={item.label} className="bg-marble-100 p-5 text-center">
-                              <div className="font-inter text-xs text-charcoal/50 uppercase tracking-wider mb-1">
+                              <div className="font-inter text-[11px] text-charcoal/50 uppercase tracking-[0.15em] mb-2">
                                 {item.label}
                               </div>
-                              <div className="font-playfair text-lg font-semibold text-charcoal">
+                              <div className="font-playfair text-xl md:text-2xl font-semibold text-charcoal tabular-nums tracking-tight leading-none break-words">
                                 {item.value}
                               </div>
                             </div>
@@ -566,12 +566,12 @@ export default function LoanRepaymentCalculator() {
                           Loan Amount *
                         </label>
                         <div className="relative">
-                          <span className="absolute left-4 top-1/2 -translate-y-1/2 font-inter text-sm text-charcoal/50">$</span>
+                          <span className="absolute left-4 top-1/2 -translate-y-1/2 font-inter text-sm text-charcoal/50 pointer-events-none">$</span>
                           <input
                             type="number"
                             value={inputs.loanAmount}
                             onChange={(e) => update("loanAmount")(e.target.value)}
-                            className="input-luxury pl-8"
+                            className="input-luxury !pl-10"
                             placeholder="500000"
                             min="10000"
                             required
@@ -588,14 +588,14 @@ export default function LoanRepaymentCalculator() {
                             type="number"
                             value={inputs.interestRate}
                             onChange={(e) => update("interestRate")(e.target.value)}
-                            className="input-luxury pr-12"
+                            className="input-luxury !pr-12"
                             placeholder="6.50"
                             min="0.1"
                             max="20"
                             step="0.05"
                             required
                           />
-                          <span className="absolute right-4 top-1/2 -translate-y-1/2 font-inter text-sm text-charcoal/50">%</span>
+                          <span className="absolute right-4 top-1/2 -translate-y-1/2 font-inter text-sm text-charcoal/50 pointer-events-none">%</span>
                         </div>
                       </div>
 
@@ -608,13 +608,13 @@ export default function LoanRepaymentCalculator() {
                             type="number"
                             value={inputs.loanTerm}
                             onChange={(e) => update("loanTerm")(e.target.value)}
-                            className="input-luxury pr-16"
+                            className="input-luxury !pr-16"
                             placeholder="30"
                             min="1"
                             max="30"
                             required
                           />
-                          <span className="absolute right-4 top-1/2 -translate-y-1/2 font-inter text-sm text-charcoal/50">years</span>
+                          <span className="absolute right-4 top-1/2 -translate-y-1/2 font-inter text-sm text-charcoal/50 pointer-events-none">years</span>
                         </div>
                       </div>
 
@@ -645,12 +645,12 @@ export default function LoanRepaymentCalculator() {
                           Extra Repayment (per {inputs.frequency === "monthly" ? "month" : inputs.frequency === "fortnightly" ? "fortnight" : "week"}) *
                         </label>
                         <div className="relative">
-                          <span className="absolute left-4 top-1/2 -translate-y-1/2 font-inter text-sm text-charcoal/50">$</span>
+                          <span className="absolute left-4 top-1/2 -translate-y-1/2 font-inter text-sm text-charcoal/50 pointer-events-none">$</span>
                           <input
                             type="number"
                             value={extraRepayment}
                             onChange={(e) => setExtraRepayment(e.target.value)}
-                            className="input-luxury pl-8 border-gold/40 focus:border-gold"
+                            className="input-luxury !pl-10 border-gold/40 focus:border-gold"
                             placeholder="500"
                             min="1"
                             required
@@ -682,7 +682,7 @@ export default function LoanRepaymentCalculator() {
                           <p className="font-inter text-xs tracking-[0.15em] uppercase text-gold mb-2">
                             Interest Saved
                           </p>
-                          <div className="font-playfair text-3xl font-semibold text-white">
+                          <div className="font-playfair text-2xl md:text-3xl font-semibold text-white tabular-nums tracking-tight leading-none break-words">
                             {formatCurrency(extraResults.interestSaved)}
                           </div>
                         </div>
@@ -691,7 +691,7 @@ export default function LoanRepaymentCalculator() {
                           <p className="font-inter text-xs tracking-[0.15em] uppercase text-gold mb-2">
                             Time Saved
                           </p>
-                          <div className="font-playfair text-3xl font-semibold text-white">
+                          <div className="font-playfair text-2xl md:text-3xl font-semibold text-white tabular-nums tracking-tight leading-none break-words">
                             {extraResults.timeSaved >= 1
                               ? `${Math.floor(extraResults.timeSaved)} yr${Math.floor(extraResults.timeSaved) !== 1 ? "s" : ""} ${Math.round((extraResults.timeSaved % 1) * 12)} mo`
                               : `${Math.round(extraResults.timeSaved * 12)} months`}
@@ -734,10 +734,10 @@ export default function LoanRepaymentCalculator() {
                               <span className="font-inter text-xs text-charcoal/60">{row.label}</span>
                             </div>
                             <div className="bg-white p-4 text-center">
-                              <span className="font-inter text-sm text-charcoal">{row.std}</span>
+                              <span className="font-inter text-sm text-charcoal tabular-nums">{row.std}</span>
                             </div>
                             <div className="bg-white p-4 text-center">
-                              <span className="font-inter text-sm text-gold font-semibold">{row.extra}</span>
+                              <span className="font-inter text-sm text-gold font-semibold tabular-nums">{row.extra}</span>
                             </div>
                           </div>
                         ))}

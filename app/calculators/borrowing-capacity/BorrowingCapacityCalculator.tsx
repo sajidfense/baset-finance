@@ -60,7 +60,7 @@ function InputField({
       </label>
       <div className="relative flex items-center">
         {prefix && (
-          <span className="absolute left-4 font-inter text-sm text-charcoal/50 select-none">
+          <span className="absolute left-4 font-inter text-sm text-charcoal/50 select-none pointer-events-none">
             {prefix}
           </span>
         )}
@@ -72,10 +72,10 @@ function InputField({
           min={min}
           max={max}
           step={step}
-          className={`input-luxury ${prefix ? "pl-8" : ""} ${suffix ? "pr-12" : ""}`}
+          className={`input-luxury ${prefix ? "!pl-10" : ""} ${suffix ? "!pr-12" : ""}`}
         />
         {suffix && (
-          <span className="absolute right-4 font-inter text-sm text-charcoal/50 select-none">
+          <span className="absolute right-4 font-inter text-sm text-charcoal/50 select-none pointer-events-none">
             {suffix}
           </span>
         )}
@@ -362,7 +362,7 @@ export default function BorrowingCapacityCalculator() {
                         </span>
                       </div>
 
-                      <div className="font-playfair text-4xl md:text-5xl font-semibold text-white mt-3 mb-1">
+                      <div className="font-playfair text-4xl md:text-5xl font-semibold text-white mt-3 mb-1 tabular-nums tracking-tight leading-none break-words">
                         {formatCurrency(results.borrowingCapacity)}
                       </div>
 
@@ -379,7 +379,7 @@ export default function BorrowingCapacityCalculator() {
                           <div className="font-inter text-xs text-white/40 uppercase tracking-wider mb-1">
                             Monthly Repayment
                           </div>
-                          <div className="font-playfair text-xl text-white font-semibold">
+                          <div className="font-playfair text-xl text-white font-semibold tabular-nums tracking-tight leading-none break-words">
                             {formatCurrency(results.monthlyRepayment)}
                           </div>
                         </div>
@@ -387,7 +387,7 @@ export default function BorrowingCapacityCalculator() {
                           <div className="font-inter text-xs text-white/40 uppercase tracking-wider mb-1">
                             Annual Repayment
                           </div>
-                          <div className="font-playfair text-xl text-white font-semibold">
+                          <div className="font-playfair text-xl text-white font-semibold tabular-nums tracking-tight leading-none break-words">
                             {formatCurrency(results.annualRepayment)}
                           </div>
                         </div>
@@ -418,7 +418,7 @@ export default function BorrowingCapacityCalculator() {
                           <div key={row.label} className="flex justify-between items-center">
                             <span className="font-inter text-xs text-charcoal/60">{row.label}</span>
                             <span
-                              className={`font-inter text-sm font-medium ${
+                              className={`font-inter text-sm font-medium tabular-nums ${
                                 row.highlight ? "text-gold" : "text-charcoal"
                               }`}
                             >
