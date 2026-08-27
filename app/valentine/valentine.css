@@ -1,0 +1,702 @@
+/* ==========================================================================
+   Pixel valentine — scoped to .vday so it never leaks into the main site.
+   ========================================================================== */
+
+.vday {
+  --ink: #8c1742;
+  --ink-deep: #5c0c2b;
+  --hot: #ff2f70;
+  --hot-deep: #d1004b;
+  --cream: #fff4fa;
+  --lilac: #f0b9f2;
+  --px: 4px;
+
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  color: var(--ink);
+  background: #f486d8;
+  font-family: var(--font-pixel), ui-monospace, "Courier New", monospace;
+  font-size: 12px;
+  line-height: 1.9;
+  letter-spacing: 0.02em;
+  text-rendering: geometricPrecision;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ---------- background layers ---------- */
+
+.vday h1,
+.vday h2,
+.vday p,
+.vday button,
+.vday input,
+.vday dt,
+.vday dd {
+  font-family: inherit;
+}
+
+/* One clipped layer for every animated decoration. Keeping them here means the
+   root never becomes a scrollable box. */
+.vday__scene {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.vday__sky {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    #ff7ad2 0%,
+    #f78fdf 22%,
+    #eda2f0 46%,
+    #f292e2 70%,
+    #f974c6 100%
+  );
+}
+
+/* The dithered checkerboard that fades out toward the horizon. */
+.vday__checks {
+  position: absolute;
+  inset: 0 0 45% 0;
+  background-image:
+    linear-gradient(45deg, rgba(255, 255, 255, 0.16) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(255, 255, 255, 0.16) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, rgba(255, 255, 255, 0.16) 75%),
+    linear-gradient(-45deg, transparent 75%, rgba(255, 255, 255, 0.16) 75%);
+  background-size: 24px 24px;
+  background-position: 0 0, 0 12px, 12px -12px, -12px 0;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 0%, transparent 100%);
+  animation: vday-checks 24s linear infinite;
+}
+
+@keyframes vday-checks {
+  to {
+    background-position: 24px 0, 24px 12px, 36px -12px, 12px 0;
+  }
+}
+
+.vday__clouds,
+.vday__hills {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+}
+
+.vday__clouds {
+  top: 0;
+  height: 100%;
+}
+
+.vday__cloud {
+  position: absolute;
+  width: 42vw;
+  max-width: 260px;
+  min-width: 150px;
+  opacity: 0.9;
+  animation: vday-drift linear infinite;
+}
+
+@keyframes vday-drift {
+  from {
+    transform: translateX(-40vw);
+  }
+  to {
+    transform: translateX(140vw);
+  }
+}
+
+.vday__hills {
+  bottom: 0;
+  height: 34%;
+  min-height: 190px;
+}
+
+.vday__hills svg {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Twinkling background sparkles. */
+.vday__star {
+  position: absolute;
+  width: 14px;
+  opacity: 0;
+  animation: vday-twinkle ease-in-out infinite;
+}
+
+@keyframes vday-twinkle {
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale(0.4) rotate(0deg);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scale(1) rotate(45deg);
+  }
+}
+
+/* Hearts drifting up the screen. */
+.vday__floater {
+  position: absolute;
+  bottom: -12%;
+  width: 18px;
+  opacity: 0.75;
+  animation: vday-rise linear infinite;
+}
+
+@keyframes vday-rise {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.8;
+  }
+  88% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-115vh) translateX(24px) rotate(18deg);
+    opacity: 0;
+  }
+}
+
+/* ---------- stage ---------- */
+
+.vday__stage {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  width: 100%;
+  max-width: 460px;
+  margin: 0 auto;
+  padding: calc(env(safe-area-inset-top) + 56px) 18px
+    calc(env(safe-area-inset-bottom) + 28px);
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  text-align: center;
+}
+
+/* ---------- pixel chrome ---------- */
+
+/* Chunky border drawn with box-shadows so corners stay square and crisp. */
+.pxl-frame {
+  position: relative;
+  background: var(--cream);
+  box-shadow:
+    0 calc(var(--px) * -1) 0 0 var(--ink),
+    0 var(--px) 0 0 var(--ink),
+    calc(var(--px) * -1) 0 0 0 var(--ink),
+    var(--px) 0 0 0 var(--ink),
+    0 calc(var(--px) * 2) 0 0 rgba(92, 12, 43, 0.35);
+}
+
+.pxl-portrait {
+  width: 128px;
+  padding: 10px;
+  background: linear-gradient(180deg, #2a0a1a 0%, #431029 100%);
+  animation: vday-bob 3.4s ease-in-out infinite;
+}
+
+.pxl-portrait svg {
+  width: 100%;
+  display: block;
+  animation: vday-breathe 2.6s ease-in-out infinite;
+}
+
+@keyframes vday-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes vday-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.04);
+  }
+}
+
+/* ---------- type ---------- */
+
+.pxl-title {
+  font-size: clamp(17px, 6.4vw, 26px);
+  line-height: 1.55;
+  color: var(--ink);
+  text-shadow:
+    2px 0 0 #fff,
+    -2px 0 0 #fff,
+    0 2px 0 #fff,
+    0 -2px 0 #fff,
+    2px 2px 0 #fff,
+    -2px 2px 0 #fff,
+    2px -2px 0 #fff,
+    -2px -2px 0 #fff,
+    0 7px 0 rgba(92, 12, 43, 0.28);
+}
+
+.pxl-sub {
+  font-size: clamp(9px, 3.1vw, 11px);
+  line-height: 2;
+  color: var(--ink-deep);
+  text-shadow: 2px 2px 0 rgba(255, 255, 255, 0.75);
+}
+
+.pxl-tiny {
+  font-size: clamp(8px, 2.6vw, 9px);
+  line-height: 2.1;
+  opacity: 0.9;
+}
+
+/* ---------- buttons ---------- */
+
+.pxl-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 12px 22px;
+  font: inherit;
+  font-size: clamp(11px, 3.6vw, 14px);
+  color: var(--cream);
+  background: var(--hot);
+  border: 0;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: transform 0.12s steps(3), background 0.2s;
+  box-shadow:
+    0 calc(var(--px) * -1) 0 0 var(--ink),
+    0 var(--px) 0 0 var(--ink),
+    calc(var(--px) * -1) 0 0 0 var(--ink),
+    var(--px) 0 0 0 var(--ink),
+    0 8px 0 0 var(--hot-deep),
+    0 12px 0 0 var(--ink);
+}
+
+.pxl-btn:active:not(:disabled) {
+  transform: translateY(6px);
+  box-shadow:
+    0 calc(var(--px) * -1) 0 0 var(--ink),
+    0 var(--px) 0 0 var(--ink),
+    calc(var(--px) * -1) 0 0 0 var(--ink),
+    var(--px) 0 0 0 var(--ink),
+    0 2px 0 0 var(--hot-deep),
+    0 6px 0 0 var(--ink);
+}
+
+.pxl-btn:focus-visible {
+  outline: 3px dashed var(--ink-deep);
+  outline-offset: 8px;
+}
+
+/* Locked until a choice is made — muted, but still solid so the scenery
+   never shows through it. */
+.pxl-btn:disabled {
+  cursor: not-allowed;
+  color: #fbeaf3;
+  background: #d69bbc;
+  box-shadow:
+    0 calc(var(--px) * -1) 0 0 var(--ink),
+    0 var(--px) 0 0 var(--ink),
+    calc(var(--px) * -1) 0 0 0 var(--ink),
+    var(--px) 0 0 0 var(--ink),
+    0 8px 0 0 #ac7194,
+    0 12px 0 0 var(--ink);
+  animation: none;
+}
+
+.pxl-btn--ghost {
+  color: var(--ink);
+  background: var(--cream);
+  box-shadow:
+    0 calc(var(--px) * -1) 0 0 var(--ink),
+    0 var(--px) 0 0 var(--ink),
+    calc(var(--px) * -1) 0 0 0 var(--ink),
+    var(--px) 0 0 0 var(--ink),
+    0 8px 0 0 #e9c4da,
+    0 12px 0 0 var(--ink);
+}
+
+.pxl-btn--ghost:active:not(:disabled) {
+  box-shadow:
+    0 calc(var(--px) * -1) 0 0 var(--ink),
+    0 var(--px) 0 0 var(--ink),
+    calc(var(--px) * -1) 0 0 0 var(--ink),
+    var(--px) 0 0 0 var(--ink),
+    0 2px 0 0 #e9c4da,
+    0 6px 0 0 var(--ink);
+}
+
+/* Yes/No duel: YES swells, NO withers. Both resize through font-size and
+   padding (not transform) so the flex row keeps them inside the viewport. */
+.vday__duel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 104px;
+}
+
+.vday__yes {
+  --grow: 1;
+  max-width: 100%;
+  padding: calc(11px * var(--grow)) calc(20px * var(--grow));
+  font-size: calc(clamp(11px, 3.6vw, 14px) * var(--grow));
+  transition: padding 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+    font-size 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: vday-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes vday-pulse {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.14);
+  }
+}
+
+.vday__no {
+  --shrink: 1;
+  padding: calc(11px * var(--shrink)) calc(18px * var(--shrink));
+  font-size: calc(clamp(10px, 3.2vw, 13px) * var(--shrink));
+  transform: translate(var(--dx, 0px), var(--dy, 0px)) rotate(var(--tilt, 0deg));
+  transition: transform 0.32s cubic-bezier(0.34, 1.56, 0.64, 1),
+    padding 0.3s ease, font-size 0.3s ease, opacity 0.3s;
+}
+
+.vday__no--gone {
+  transform: scale(0) rotate(40deg);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.vday__taunt {
+  min-height: 34px;
+  animation: vday-wiggle 0.5s steps(4);
+}
+
+@keyframes vday-wiggle {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-6px);
+  }
+  75% {
+    transform: translateX(6px);
+  }
+}
+
+/* ---------- choice chips ---------- */
+
+.vday__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  width: 100%;
+}
+
+.pxl-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 68px;
+  padding: 12px 8px;
+  font: inherit;
+  font-size: clamp(8px, 2.8vw, 10px);
+  line-height: 1.7;
+  color: var(--ink);
+  background: var(--cream);
+  border: 0;
+  cursor: pointer;
+  transition: transform 0.12s steps(2), background 0.2s;
+  box-shadow:
+    0 calc(var(--px) * -1) 0 0 var(--ink),
+    0 var(--px) 0 0 var(--ink),
+    calc(var(--px) * -1) 0 0 0 var(--ink),
+    var(--px) 0 0 0 var(--ink),
+    0 6px 0 0 #e9c4da,
+    0 10px 0 0 var(--ink);
+}
+
+.pxl-chip:active {
+  transform: translateY(4px);
+}
+
+.pxl-chip__icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.pxl-chip--on {
+  color: var(--cream);
+  background: var(--hot);
+  box-shadow:
+    0 calc(var(--px) * -1) 0 0 var(--ink),
+    0 var(--px) 0 0 var(--ink),
+    calc(var(--px) * -1) 0 0 0 var(--ink),
+    var(--px) 0 0 0 var(--ink),
+    0 6px 0 0 var(--hot-deep),
+    0 10px 0 0 var(--ink);
+}
+
+/* ---------- inputs ---------- */
+
+.pxl-input {
+  width: 100%;
+  min-height: 52px;
+  padding: 12px 14px;
+  font: inherit;
+  font-size: clamp(11px, 3.6vw, 14px);
+  color: var(--ink);
+  text-align: center;
+  background: var(--cream);
+  border: 0;
+  border-radius: 0;
+  box-shadow:
+    0 calc(var(--px) * -1) 0 0 var(--ink),
+    0 var(--px) 0 0 var(--ink),
+    calc(var(--px) * -1) 0 0 0 var(--ink),
+    var(--px) 0 0 0 var(--ink),
+    inset 0 4px 0 0 rgba(140, 23, 66, 0.12);
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.pxl-input:focus-visible {
+  outline: 3px dashed var(--ink-deep);
+  outline-offset: 6px;
+}
+
+/* ---------- speech bubble ---------- */
+
+.pxl-bubble {
+  position: relative;
+  display: inline-block;
+  padding: 10px 14px;
+  font-size: clamp(8px, 2.7vw, 10px);
+  background: var(--cream);
+  box-shadow:
+    0 calc(var(--px) * -1) 0 0 var(--ink),
+    0 var(--px) 0 0 var(--ink),
+    calc(var(--px) * -1) 0 0 0 var(--ink),
+    var(--px) 0 0 0 var(--ink);
+  animation: vday-bob 3.4s ease-in-out infinite;
+}
+
+.pxl-bubble::after {
+  content: "";
+  position: absolute;
+  bottom: -12px;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  margin-left: -4px;
+  background: var(--cream);
+  box-shadow:
+    0 4px 0 0 var(--ink),
+    -4px 0 0 0 var(--ink),
+    4px 0 0 0 var(--ink);
+}
+
+/* ---------- ticket ---------- */
+
+.vday__ticket {
+  width: 100%;
+  padding: 20px 18px;
+  background: var(--cream);
+  animation: vday-drop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes vday-drop {
+  from {
+    transform: translateY(-24px) scale(0.9);
+    opacity: 0;
+  }
+}
+
+.vday__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 0;
+  font-size: clamp(9px, 2.9vw, 11px);
+  text-align: left;
+  border-bottom: 4px dotted rgba(140, 23, 66, 0.3);
+}
+
+.vday__row:last-of-type {
+  border-bottom: 0;
+}
+
+.vday__row dt {
+  flex: none;
+  opacity: 0.65;
+}
+
+.vday__row dd {
+  margin: 0;
+  color: var(--hot-deep);
+  text-align: right;
+}
+
+/* ---------- confetti burst ---------- */
+
+.vday__confetti {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  width: 16px;
+  margin: -8px 0 0 -8px;
+  animation: vday-burst 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes vday-burst {
+  0% {
+    transform: translate(0, 0) scale(0.2) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--tx), var(--ty)) scale(1) rotate(var(--rot));
+    opacity: 0;
+  }
+}
+
+/* ---------- hud ---------- */
+
+.vday__hud {
+  position: absolute;
+  top: calc(env(safe-area-inset-top) + 12px);
+  left: 12px;
+  right: 12px;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.vday__hud > * {
+  pointer-events: auto;
+}
+
+.vday__pips {
+  display: flex;
+  gap: 5px;
+}
+
+.vday__pip {
+  width: 12px;
+  opacity: 0.35;
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.vday__pip--on {
+  opacity: 1;
+  transform: scale(1.25);
+}
+
+.vday__icon-btn {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  font: inherit;
+  font-size: 14px;
+  color: var(--ink);
+  background: var(--cream);
+  border: 0;
+  cursor: pointer;
+  box-shadow:
+    0 calc(var(--px) * -1) 0 0 var(--ink),
+    0 var(--px) 0 0 var(--ink),
+    calc(var(--px) * -1) 0 0 0 var(--ink),
+    var(--px) 0 0 0 var(--ink);
+}
+
+/* ---------- start screen ---------- */
+
+.vday__blink {
+  animation: vday-blink 1.1s steps(1) infinite;
+}
+
+@keyframes vday-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0.15;
+  }
+}
+
+/* CRT scanlines, very subtle. */
+.vday__scan {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    180deg,
+    rgba(92, 12, 43, 0.05) 0px,
+    rgba(92, 12, 43, 0.05) 1px,
+    transparent 1px,
+    transparent 7px
+  );
+  mix-blend-mode: multiply;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vday *,
+  .vday *::before,
+  .vday *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+
+  .vday__star,
+  .vday__floater {
+    opacity: 0.6;
+  }
+}
