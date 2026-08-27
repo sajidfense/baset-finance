@@ -10,9 +10,10 @@ import {
   CAT_PLEAD,
   CAT_SAD,
   CAT_SHY,
-  ENVELOPE,
   HEART,
   HUG,
+  SPEAKER,
+  SPEAKER_MUTED,
 } from "./pixel-data";
 
 type Scene = "start" | "ask" | "yay" | "date" | "time" | "plan" | "done";
@@ -57,20 +58,20 @@ const JITTER = [
 ];
 
 const TIME_SLOTS = [
-  { icon: "🥐", label: "Brunch", value: "11:00" },
-  { icon: "☕", label: "Coffee", value: "15:00" },
-  { icon: "🌅", label: "Sunset", value: "17:30" },
-  { icon: "🍝", label: "Dinner", value: "19:00" },
-  { icon: "🌙", label: "Late night", value: "21:30" },
+  { label: "Brunch", value: "11:00" },
+  { label: "Coffee", value: "15:00" },
+  { label: "Sunset", value: "17:30" },
+  { label: "Dinner", value: "19:00" },
+  { label: "Late night", value: "21:30" },
 ];
 
 const PLANS = [
-  { icon: "🍝", label: "Dinner date" },
-  { icon: "🎬", label: "Movie night" },
-  { icon: "🧋", label: "Boba run" },
-  { icon: "🌊", label: "Beach walk" },
-  { icon: "🕹️", label: "Arcade" },
-  { icon: "✨", label: "Surprise me" },
+  "Dinner date",
+  "Movie night",
+  "Coffee & walk",
+  "Picnic",
+  "Mini golf",
+  "Surprise me",
 ];
 
 function toISODate(date: Date) {
@@ -88,13 +89,12 @@ function nextWeekday(weekday: number) {
 
 function formatDate(iso: string) {
   if (!iso) return "—";
-  return new Date(`${iso}T00:00:00`)
-    .toLocaleDateString(undefined, {
-      weekday: "short",
-      day: "numeric",
-      month: "short",
-    })
-    .toUpperCase();
+  return new Date(`${iso}T00:00:00`).toLocaleDateString(undefined, {
+    weekday: "short",
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
 }
 
 function formatTime(value: string) {
@@ -245,7 +245,10 @@ export default function ValentineExperience() {
             aria-pressed={muted}
             aria-label={muted ? "Unmute sound" : "Mute sound"}
           >
-            {muted ? "🔇" : "🔊"}
+            <PixelSprite
+              rows={muted ? SPEAKER_MUTED : SPEAKER}
+              style={{ width: 20 }}
+            />
           </button>
         </div>
       )}
@@ -316,7 +319,7 @@ export default function ValentineExperience() {
 
         {scene === "yay" && (
           <>
-            <div className="pxl-frame pxl-portrait" style={{ width: 168 }}>
+            <div className="pxl-frame pxl-portrait pxl-portrait--light" style={{ width: 168 }}>
               <PixelSprite rows={HUG} label="Two pixel characters hugging" />
             </div>
             <h1 className="pxl-title">Yay!</h1>
@@ -334,7 +337,7 @@ export default function ValentineExperience() {
         {scene === "date" && (
           <>
             <p className="pxl-bubble">Maybeeeeee...</p>
-            <div className="pxl-frame pxl-portrait" style={{ width: 104 }}>
+            <div className="pxl-frame pxl-portrait pxl-portrait--light" style={{ width: 104 }}>
               <PixelSprite rows={CAT_HOPEFUL} label="A scheming pixel cat" />
             </div>
 
@@ -382,7 +385,7 @@ export default function ValentineExperience() {
 
         {scene === "time" && (
           <>
-            <div className="pxl-frame pxl-portrait" style={{ width: 96 }}>
+            <div className="pxl-frame pxl-portrait pxl-portrait--light" style={{ width: 96 }}>
               <PixelSprite rows={CAT_HAPPY} label="A delighted pixel cat" />
             </div>
 
@@ -400,12 +403,11 @@ export default function ValentineExperience() {
                     setTime(slot.value);
                   }}
                 >
-                  <span className="pxl-chip__icon">{slot.icon}</span>
                   {slot.label}
                 </button>
               ))}
               <label className="pxl-chip" style={{ cursor: "text" }}>
-                <span className="pxl-chip__icon">⏰</span>
+                <span style={{ opacity: 0.6 }}>Custom</span>
                 <input
                   type="time"
                   value={time}
@@ -437,26 +439,24 @@ export default function ValentineExperience() {
 
         {scene === "plan" && (
           <>
-            <div className="pxl-frame pxl-portrait" style={{ width: 96 }}>
+            <div className="pxl-frame pxl-portrait pxl-portrait--light" style={{ width: 96 }}>
               <PixelSprite rows={CAT_PLEAD} label="An excited pixel cat" />
             </div>
 
-            <h1 className="pxl-title">And we do...</h1>
-            <p className="pxl-sub">Pick the vibe. You can change it later. Maybe.</p>
+            <h1 className="pxl-title">What would you like to do?</h1>
 
             <div className="vday__grid">
               {PLANS.map((option) => (
                 <button
-                  key={option.label}
+                  key={option}
                   type="button"
-                  className={`pxl-chip${plan === option.label ? " pxl-chip--on" : ""}`}
+                  className={`pxl-chip${plan === option ? " pxl-chip--on" : ""}`}
                   onClick={() => {
                     blip([740, 988]);
-                    setPlan(option.label);
+                    setPlan(option);
                   }}
                 >
-                  <span className="pxl-chip__icon">{option.icon}</span>
-                  {option.label}
+                  {option}
                 </button>
               ))}
             </div>
@@ -467,7 +467,7 @@ export default function ValentineExperience() {
               onClick={() => go("done", [659, 784, 988, 1319])}
               disabled={!plan}
             >
-              It&apos;s a date →
+              Lock it in
             </button>
           </>
         )}
@@ -488,42 +488,44 @@ export default function ValentineExperience() {
               />
             ))}
 
-            <div className="pxl-frame pxl-portrait" style={{ width: 88 }}>
-              <PixelSprite rows={ENVELOPE} label="A sealed love letter" />
+            <div
+              className="pxl-frame pxl-portrait pxl-portrait--light"
+              style={{ width: 150 }}
+            >
+              <PixelSprite rows={HUG} label="Two pixel characters hugging" />
             </div>
 
             <h1 className="pxl-title">It&apos;s a date!</h1>
 
             <div className="pxl-frame vday__ticket">
-              <dl style={{ margin: 0 }}>
-                <div className="vday__row">
-                  <dt>Day</dt>
-                  <dd>{formatDate(date)}</dd>
-                </div>
-                <div className="vday__row">
-                  <dt>Time</dt>
-                  <dd>{formatTime(time)}</dd>
-                </div>
-                <div className="vday__row">
-                  <dt>Plan</dt>
-                  <dd>{plan}</dd>
-                </div>
-              </dl>
-              <p className="pxl-tiny" style={{ marginTop: 14 }}>
-                Don&apos;t be late. I&apos;ll be the nervous one. ♥
+              <p className="vday__row">
+                <span>Date:</span>
+                <b>{formatDate(date)}</b>
+              </p>
+              <p className="vday__row">
+                <span>Time:</span>
+                <b>{formatTime(time)}</b>
+              </p>
+              <p className="vday__row">
+                <span>Activity:</span>
+                <b>{plan}</b>
+              </p>
+              <p className="pxl-tiny vday__note">
+                Don&apos;t be late. I&apos;ll be the nervous one.
               </p>
             </div>
 
             <div style={{ display: "flex", flexWrap: "wrap", gap: 12, justifyContent: "center" }}>
               <button type="button" className="pxl-btn" onClick={share}>
-                {copied ? "Copied! ✓" : "Send it 💌"}
+                {copied ? "Copied!" : "Send it"}
+                <PixelSprite rows={HEART} tint="#fff4fa" style={{ width: 14 }} />
               </button>
               <button type="button" className="pxl-btn pxl-btn--ghost" onClick={restart}>
                 Play again
               </button>
             </div>
 
-            <div style={{ display: "flex", gap: 8 }} aria-hidden="true">
+            <div className="vday__cheer" style={{ display: "flex", gap: 8 }} aria-hidden="true">
               {[0, 1, 2].map((i) => (
                 <PixelSprite
                   key={i}

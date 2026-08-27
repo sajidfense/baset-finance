@@ -4,6 +4,8 @@ type PixelSpriteProps = {
   rows: string[];
   /** Accessible label; omit for purely decorative art. */
   label?: string;
+  /** Overrides every colour in the sprite, for drawing it on a dark button. */
+  tint?: string;
   className?: string;
   style?: React.CSSProperties;
 };
@@ -15,6 +17,7 @@ type PixelSpriteProps = {
 export default function PixelSprite({
   rows,
   label,
+  tint,
   className,
   style,
 }: PixelSpriteProps) {
@@ -38,7 +41,7 @@ export default function PixelSprite({
           y={rect.y}
           width={rect.w}
           height={1}
-          fill={rect.fill}
+          fill={tint ?? rect.fill}
         />
       ))}
     </svg>

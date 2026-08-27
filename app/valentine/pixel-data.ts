@@ -131,6 +131,27 @@ export const HEART = [
   "...H...",
 ];
 
+/** Sound toggle icons, so the HUD stays pixel art instead of system emoji. */
+export const SPEAKER = [
+  "...OO....",
+  "..OOO..O.",
+  "OOOOO.O.O",
+  "OOOOO.O.O",
+  "OOOOO.O.O",
+  "..OOO..O.",
+  "...OO....",
+];
+
+export const SPEAKER_MUTED = [
+  "...OO....",
+  "..OOO....",
+  "OOOOO.O.O",
+  "OOOOO..O.",
+  "OOOOO.O.O",
+  "..OOO....",
+  "...OO....",
+];
+
 /** Chunky cloud used in the parallax sky. */
 export const CLOUD = [
   "........CCCC........",
@@ -152,20 +173,6 @@ export const SPARKLE = [
   "...*...",
 ];
 
-/** Envelope for the final ticket. */
-export const ENVELOPE = [
-  "OOOOOOOOOOOO",
-  "OO########OO",
-  "O#OO####OO#O",
-  "O##OO##OO##O",
-  "O###OOOO###O",
-  "O####OO####O",
-  "O##HH#HH###O",
-  "O##HHHHH###O",
-  "O###HHH####O",
-  "O####H#####O",
-  "OOOOOOOOOOOO",
-];
 
 export type PixelRect = { x: number; y: number; w: number; fill: string };
 
