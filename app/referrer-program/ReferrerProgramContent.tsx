@@ -1,10 +1,15 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import PageHero from "@/components/PageHero";
 import { submitToSheet } from "@/lib/submitToSheet";
+import {
+  referralStatsAsOf,
+  referralTotals,
+  referrerResults,
+} from "@/lib/referralStats";
 import {
   DollarSign,
   Users,
@@ -13,11 +18,8 @@ import {
   CheckCircle,
   Send,
   UserPlus,
-  Handshake,
   Home,
   Wallet,
-  ChevronDown,
-  ChevronUp,
   Calculator,
   TrendingUp,
   AlertCircle,
@@ -285,41 +287,59 @@ function EarningsCalculator() {
   );
 }
 
-// Placeholder Dashboard Component
+// Refer & Earn results — figures live in lib/referralStats.ts
 function ReferrerDashboard() {
   return (
-    <div className="bg-marble-100 border border-marble-300 p-8">
-      <div className="flex items-center gap-3 mb-6">
+    <div className="bg-marble-100 border border-marble-300 p-6 md:p-8">
+      <div className="flex flex-wrap items-center gap-3 mb-6">
         <BarChart2 size={20} className="text-gold" />
         <h3 className="font-playfair text-xl font-semibold text-charcoal">
-          Refer &amp; Earn Dashboard
+          Programme Totals
         </h3>
-        <span className="ml-auto px-3 py-1 bg-gold/10 text-gold text-xs font-inter tracking-wider uppercase">
-          Coming Soon
+        <span className="ml-auto font-inter text-xs text-charcoal/60 tracking-wider uppercase">
+          As of {referralStatsAsOf}
         </span>
       </div>
 
-      <div className="grid grid-cols-3 gap-px bg-marble-300 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-marble-300 mb-8">
         {[
-          { label: "Referrals Submitted", value: "—" },
-          { label: "Approved Referrals", value: "—" },
-          { label: "Commission Earned", value: "—" },
+          { label: "Total Referred", value: referralTotals.referred },
+          { label: "Total Settled", value: referralTotals.settled },
+          { label: "Commission Paid", value: referralTotals.commission },
         ].map((stat) => (
           <div key={stat.label} className="bg-white p-6 text-center">
-            <div className="font-playfair text-3xl font-semibold text-charcoal/30 mb-1">
-              {stat.value}
+            <div className="font-playfair text-2xl lg:text-3xl font-semibold text-charcoal mb-1">
+              {formatCurrency(stat.value)}
             </div>
-            <div className="font-inter text-xs text-charcoal/40 uppercase tracking-wider">
+            <div className="font-inter text-xs text-charcoal/60 uppercase tracking-wider">
               {stat.label}
             </div>
           </div>
         ))}
       </div>
 
-      <p className="font-inter text-sm text-charcoal/50 text-center">
-        Your personalised Refer &amp; Earn dashboard will be available once you've
-        signed up and had your first referral processed.
-      </p>
+      <div className="overflow-x-auto">
+        <table className="w-full font-inter text-sm whitespace-nowrap">
+          <thead>
+            <tr className="border-b border-marble-300 text-xs uppercase tracking-wider text-charcoal/60">
+              <th className="py-3 pr-4 text-left font-medium">Referrer</th>
+              <th className="py-3 px-4 text-right font-medium">Referred</th>
+              <th className="py-3 px-4 text-right font-medium">Settled</th>
+              <th className="py-3 pl-4 text-right font-medium">Commission Earned</th>
+            </tr>
+          </thead>
+          <tbody>
+            {referrerResults.map((r) => (
+              <tr key={r.name} className="border-b border-marble-300 last:border-0">
+                <td className="py-4 pr-4 font-playfair text-base text-charcoal">{r.name}</td>
+                <td className="py-4 px-4 text-right text-charcoal/80">{formatCurrency(r.referred)}</td>
+                <td className="py-4 px-4 text-right text-charcoal/80">{formatCurrency(r.settled)}</td>
+                <td className="py-4 pl-4 text-right font-semibold text-gold">{formatCurrency(r.commission)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
@@ -329,7 +349,6 @@ export default function ReferrerProgramContent() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [submitError, setSubmitError] = useState("");
-  const [showDashboard, setShowDashboard] = useState(false);
 
   const update = <K extends keyof FormData>(field: K, value: FormData[K]) =>
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -802,61 +821,26 @@ export default function ReferrerProgramContent() {
         </div>
       </section>
 
-      {/* Placeholder Dashboard */}
+      {/* Refer & Earn Results */}
       <section className="section-padding bg-white">
         <div className="container-luxury">
-          <div className="flex items-center justify-between mb-8">
-            <div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <div className="mb-8">
               <p className="font-inter text-xs tracking-[0.25em] uppercase text-gold mb-2">
-                Member Portal
+                Results to Date
               </p>
               <h2 className="font-playfair text-2xl font-semibold text-charcoal">
                 Refer &amp; Earn Dashboard
               </h2>
             </div>
-            <button
-              onClick={() => setShowDashboard(!showDashboard)}
-              className="flex items-center gap-2 text-sm font-inter text-gold hover:text-gold-dark transition-colors"
-            >
-              {showDashboard ? "Hide" : "Preview"}
-              {showDashboard ? (
-                <ChevronUp size={16} />
-              ) : (
-                <ChevronDown size={16} />
-              )}
-            </button>
-          </div>
 
-          <AnimatePresence>
-            {showDashboard && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <ReferrerDashboard />
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {!showDashboard && (
-            <div className="bg-marble-100 border border-marble-300 p-8 text-center">
-              <Handshake size={32} className="text-gold/40 mx-auto mb-4" />
-              <p className="font-playfair text-lg text-charcoal/50 italic mb-2">
-                Your partner dashboard
-              </p>
-              <p className="font-inter text-sm text-charcoal/40 mb-4">
-                Track referrals, commissions, and loan statuses all in one place.
-              </p>
-              <button
-                onClick={() => setShowDashboard(true)}
-                className="btn-outline-gold text-xs"
-              >
-                Preview Dashboard
-              </button>
-            </div>
-          )}
+            <ReferrerDashboard />
+          </motion.div>
         </div>
       </section>
     </>

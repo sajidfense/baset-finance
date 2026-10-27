@@ -299,7 +299,7 @@ export default function BorrowingCapacityCalculator() {
                         hint="Expected interest rate p.a."
                         min="0.1"
                         max="20"
-                        step="0.05"
+                        step="any"
                       />
                       <InputField
                         label="Loan Term"

@@ -181,7 +181,7 @@ function RefinanceCalculator() {
                   placeholder="6.50"
                   min="0.1"
                   max="20"
-                  step="0.05"
+                  step="any"
                 />
                 <span className="absolute right-4 top-1/2 -translate-y-1/2 font-inter text-sm text-charcoal/50">
                   %
@@ -227,7 +227,7 @@ function RefinanceCalculator() {
                     placeholder="5.99"
                     min="0.1"
                     max="20"
-                    step="0.05"
+                    step="any"
                   />
                   <span className="absolute right-4 top-1/2 -translate-y-1/2 font-inter text-sm text-charcoal/50">
                     %

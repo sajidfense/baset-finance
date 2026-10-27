@@ -323,7 +323,7 @@ export default function LoanRepaymentCalculator() {
                             placeholder="6.50"
                             min="0.1"
                             max="20"
-                            step="0.05"
+                            step="any"
                             required
                           />
                           <span className="absolute right-4 top-1/2 -translate-y-1/2 font-inter text-sm text-charcoal/50 pointer-events-none">%</span>
@@ -592,7 +592,7 @@ export default function LoanRepaymentCalculator() {
                             placeholder="6.50"
                             min="0.1"
                             max="20"
-                            step="0.05"
+                            step="any"
                             required
                           />
                           <span className="absolute right-4 top-1/2 -translate-y-1/2 font-inter text-sm text-charcoal/50 pointer-events-none">%</span>

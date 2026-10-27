@@ -321,7 +321,7 @@ export default function CalculatorSection() {
                     <InputRow label="Credit Cards" value={bForm.creditCards} onChange={bUpdate("creditCards")} prefix="$" placeholder="0" hint="Total credit card limits" min="0" />
                   </div>
                   <div className="grid grid-cols-2 gap-4">
-                    <InputRow label="Interest Rate" value={bForm.interestRate} onChange={bUpdate("interestRate")} suffix="%" placeholder="6.50" min="0.1" max="20" step="0.05" />
+                    <InputRow label="Interest Rate" value={bForm.interestRate} onChange={bUpdate("interestRate")} suffix="%" placeholder="6.50" min="0.1" max="20" step="any" />
                     <InputRow label="Loan Term" value={bForm.loanTerm} onChange={bUpdate("loanTerm")} suffix="yrs" placeholder="30" min="5" max="30" />
                   </div>
                   <button type="submit" className="btn-gold w-full justify-center">
@@ -371,7 +371,7 @@ export default function CalculatorSection() {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 <form onSubmit={(e) => { e.preventDefault(); setRCalculated(true); }} className="space-y-5">
                   <InputRow label="Loan Amount *" value={rForm.loanAmount} onChange={rUpdate("loanAmount")} prefix="$" placeholder="500000" min="10000" />
-                  <InputRow label="Interest Rate (p.a.) *" value={rForm.interestRate} onChange={rUpdate("interestRate")} suffix="%" placeholder="6.50" min="0.1" max="20" step="0.05" hint="Enter your own interest rate" />
+                  <InputRow label="Interest Rate (p.a.) *" value={rForm.interestRate} onChange={rUpdate("interestRate")} suffix="%" placeholder="6.50" min="0.1" max="20" step="any" hint="Enter your own interest rate" />
                   <InputRow label="Loan Term *" value={rForm.loanTerm} onChange={rUpdate("loanTerm")} suffix="yrs" placeholder="30" min="1" max="30" />
                   <div>
                     <label className="block font-inter text-xs uppercase tracking-wider text-white/50 mb-2">Repayment Frequency</label>
@@ -515,13 +515,13 @@ export default function CalculatorSection() {
                 <form onSubmit={(e) => { e.preventDefault(); setRefCalculated(true); }} className="space-y-5">
                   <InputRow label="Current Loan Balance *" value={refForm.currentBalance} onChange={refUpdate("currentBalance")} prefix="$" placeholder="500000" min="10000" />
                   <div className="grid grid-cols-2 gap-4">
-                    <InputRow label="Current Rate (p.a.) *" value={refForm.currentRate} onChange={refUpdate("currentRate")} suffix="%" placeholder="6.50" min="0.1" max="20" step="0.05" hint="Enter your current interest rate" />
+                    <InputRow label="Current Rate (p.a.) *" value={refForm.currentRate} onChange={refUpdate("currentRate")} suffix="%" placeholder="6.50" min="0.1" max="20" step="any" hint="Enter your current interest rate" />
                     <InputRow label="Remaining Term *" value={refForm.remainingTerm} onChange={refUpdate("remainingTerm")} suffix="yrs" placeholder="25" min="1" max="30" />
                   </div>
                   <div className="border-t border-white/10 pt-4">
                     <p className="font-inter text-xs uppercase tracking-wider text-gold mb-4">New Loan Details</p>
                     <div className="grid grid-cols-2 gap-4">
-                      <InputRow label="New Rate (p.a.) *" value={refForm.newRate} onChange={refUpdate("newRate")} suffix="%" placeholder="5.99" min="0.1" max="20" step="0.05" hint="Enter the new interest rate" />
+                      <InputRow label="New Rate (p.a.) *" value={refForm.newRate} onChange={refUpdate("newRate")} suffix="%" placeholder="5.99" min="0.1" max="20" step="any" hint="Enter the new interest rate" />
                       <InputRow label="New Loan Term *" value={refForm.newTerm} onChange={refUpdate("newTerm")} suffix="yrs" placeholder="25" min="1" max="30" />
                     </div>
                   </div>

@@ -190,7 +190,7 @@ function InputField({
 }) {
   return (
     <div>
-      <label className="flex items-center gap-1.5 font-inter text-xs uppercase tracking-wider text-charcoal/50 mb-2">
+      <label className="flex items-center gap-1.5 font-inter text-xs uppercase tracking-wide text-charcoal/75 mb-2 font-medium">
         {label}
         {hint && (
           <span title={hint} className="cursor-help">
@@ -312,7 +312,7 @@ export default function CalculatorsPageContent() {
                       <InputField label="Credit Cards" value={bForm.creditCards} onChange={bUpdate("creditCards")} prefix="$" placeholder="0" hint="Total credit card limits" min="0" />
                     </div>
                     <div className="grid grid-cols-2 gap-4">
-                      <InputField label="Interest Rate" value={bForm.interestRate} onChange={bUpdate("interestRate")} suffix="%" placeholder="6.50" min="0.1" max="20" step="0.05" />
+                      <InputField label="Interest Rate" value={bForm.interestRate} onChange={bUpdate("interestRate")} suffix="%" placeholder="6.50" min="0.1" max="20" step="any" />
                       <InputField label="Loan Term" value={bForm.loanTerm} onChange={bUpdate("loanTerm")} suffix="yrs" placeholder="30" min="5" max="30" />
                     </div>
                     <button type="submit" className="btn-gold w-full justify-center"><Calculator size={16} /> Calculate Borrowing Capacity</button>
@@ -323,7 +323,7 @@ export default function CalculatorsPageContent() {
                     <div className="space-y-4">
                       <div className="bg-charcoal p-8 relative">
                         <div className="absolute top-0 right-0 w-12 h-12 border-t border-r border-gold/30" />
-                        <p className="font-inter text-xs tracking-[0.2em] uppercase text-gold mb-2">Estimated Borrowing Capacity</p>
+                        <p className="font-inter text-xs tracking-[0.15em] uppercase text-gold mb-2">Estimated Borrowing Capacity</p>
                         <div className="font-playfair text-4xl md:text-5xl font-semibold text-white mt-2">{formatCurrency(bResult.capacity)}</div>
                         <div className="w-8 h-px bg-gold my-5" />
                         <div className="grid grid-cols-2 gap-4">
@@ -342,8 +342,8 @@ export default function CalculatorsPageContent() {
                   ) : (
                     <div className="h-full bg-marble-100 border border-dashed border-marble-300 flex flex-col items-center justify-center py-20 text-center">
                       <DollarSign size={40} className="text-gold/30 mb-4" />
-                      <p className="font-playfair text-lg text-charcoal/30 italic mb-1">Your results will appear here</p>
-                      <p className="font-inter text-xs text-charcoal/20">Enter your details and click Calculate</p>
+                      <p className="font-playfair text-lg text-charcoal/70 mb-1">Your results will appear here</p>
+                      <p className="font-inter text-xs text-charcoal/50">Enter your details and click Calculate</p>
                     </div>
                   )}
                 </div>
@@ -366,10 +366,10 @@ export default function CalculatorsPageContent() {
                   </p>
                   <form onSubmit={(e) => { e.preventDefault(); setRCalculated(true); }} className="space-y-5">
                     <InputField label="Loan Amount *" value={rForm.loanAmount} onChange={rUpdate("loanAmount")} prefix="$" placeholder="500000" min="10000" />
-                    <InputField label="Interest Rate (p.a.) *" value={rForm.interestRate} onChange={rUpdate("interestRate")} suffix="%" placeholder="6.50" min="0.1" max="20" step="0.05" hint="Enter your own interest rate" />
+                    <InputField label="Interest Rate (p.a.) *" value={rForm.interestRate} onChange={rUpdate("interestRate")} suffix="%" placeholder="6.50" min="0.1" max="20" step="any" hint="Enter your own interest rate" />
                     <InputField label="Loan Term *" value={rForm.loanTerm} onChange={rUpdate("loanTerm")} suffix="yrs" placeholder="30" min="1" max="30" />
                     <div>
-                      <label className="block font-inter text-xs uppercase tracking-wider text-charcoal/50 mb-2">Repayment Frequency</label>
+                      <label className="block font-inter text-xs uppercase tracking-wide text-charcoal/75 mb-2 font-medium">Repayment Frequency</label>
                       <div className="grid grid-cols-3 gap-2">
                         {(["monthly", "fortnightly", "weekly"] as Frequency[]).map((freq) => (
                           <button
@@ -395,7 +395,7 @@ export default function CalculatorsPageContent() {
                     <div className="space-y-4">
                       <div className="bg-charcoal p-8 relative">
                         <div className="absolute top-0 right-0 w-12 h-12 border-t border-r border-gold/30" />
-                        <p className="font-inter text-xs tracking-[0.2em] uppercase text-gold mb-2">
+                        <p className="font-inter text-xs tracking-[0.15em] uppercase text-gold mb-2">
                           {rForm.frequency.charAt(0).toUpperCase() + rForm.frequency.slice(1)} Repayment
                         </p>
                         <div className="font-playfair text-4xl md:text-5xl font-semibold text-white mt-2">{formatCurrency(rResult.repayment)}</div>
@@ -420,8 +420,8 @@ export default function CalculatorsPageContent() {
                   ) : (
                     <div className="h-full bg-marble-100 border border-dashed border-marble-300 flex flex-col items-center justify-center py-20 text-center">
                       <Calculator size={40} className="text-gold/30 mb-4" />
-                      <p className="font-playfair text-lg text-charcoal/30 italic mb-1">Your results will appear here</p>
-                      <p className="font-inter text-xs text-charcoal/20">Enter your loan details and click Calculate</p>
+                      <p className="font-playfair text-lg text-charcoal/70 mb-1">Your results will appear here</p>
+                      <p className="font-inter text-xs text-charcoal/50">Enter your loan details and click Calculate</p>
                     </div>
                   )}
                 </div>
@@ -463,7 +463,7 @@ export default function CalculatorsPageContent() {
                     <div className="space-y-4">
                       <div className="bg-charcoal p-8 relative">
                         <div className="absolute top-0 right-0 w-12 h-12 border-t border-r border-gold/30" />
-                        <p className="font-inter text-xs tracking-[0.2em] uppercase text-gold mb-2">Total Purchase Costs</p>
+                        <p className="font-inter text-xs tracking-[0.15em] uppercase text-gold mb-2">Total Purchase Costs</p>
                         <div className="font-playfair text-4xl md:text-5xl font-semibold text-white mt-2">{formatCurrency(pResult.total)}</div>
                         <div className="w-8 h-px bg-gold my-5" />
                         <div className="space-y-3">
@@ -493,8 +493,8 @@ export default function CalculatorsPageContent() {
                   ) : (
                     <div className="h-full bg-marble-100 border border-dashed border-marble-300 flex flex-col items-center justify-center py-20 text-center">
                       <Home size={40} className="text-gold/30 mb-4" />
-                      <p className="font-playfair text-lg text-charcoal/30 italic mb-1">Your cost breakdown will appear here</p>
-                      <p className="font-inter text-xs text-charcoal/20">Enter property value and click Calculate</p>
+                      <p className="font-playfair text-lg text-charcoal/70 mb-1">Your cost breakdown will appear here</p>
+                      <p className="font-inter text-xs text-charcoal/50">Enter property value and click Calculate</p>
                     </div>
                   )}
                 </div>
@@ -518,13 +518,13 @@ export default function CalculatorsPageContent() {
                   <form onSubmit={(e) => { e.preventDefault(); setRefCalculated(true); }} className="space-y-5">
                     <InputField label="Current Loan Balance *" value={refForm.currentBalance} onChange={refUpdate("currentBalance")} prefix="$" placeholder="500000" min="10000" />
                     <div className="grid grid-cols-2 gap-4">
-                      <InputField label="Current Rate (p.a.) *" value={refForm.currentRate} onChange={refUpdate("currentRate")} suffix="%" placeholder="6.50" min="0.1" max="20" step="0.05" hint="Enter your current interest rate" />
+                      <InputField label="Current Rate (p.a.) *" value={refForm.currentRate} onChange={refUpdate("currentRate")} suffix="%" placeholder="6.50" min="0.1" max="20" step="any" hint="Enter your current interest rate" />
                       <InputField label="Remaining Term *" value={refForm.remainingTerm} onChange={refUpdate("remainingTerm")} suffix="yrs" placeholder="25" min="1" max="30" />
                     </div>
                     <div className="border-t border-marble-300 pt-5">
                       <p className="font-inter text-xs uppercase tracking-wider text-gold mb-4">New Loan Details</p>
                       <div className="grid grid-cols-2 gap-4">
-                        <InputField label="New Rate (p.a.) *" value={refForm.newRate} onChange={refUpdate("newRate")} suffix="%" placeholder="5.99" min="0.1" max="20" step="0.05" hint="Enter the new interest rate" />
+                        <InputField label="New Rate (p.a.) *" value={refForm.newRate} onChange={refUpdate("newRate")} suffix="%" placeholder="5.99" min="0.1" max="20" step="any" hint="Enter the new interest rate" />
                         <InputField label="New Loan Term *" value={refForm.newTerm} onChange={refUpdate("newTerm")} suffix="yrs" placeholder="25" min="1" max="30" />
                       </div>
                     </div>
@@ -536,7 +536,7 @@ export default function CalculatorsPageContent() {
                     <div className="space-y-4">
                       <div className="bg-charcoal p-8 relative">
                         <div className="absolute top-0 right-0 w-12 h-12 border-t border-r border-gold/30" />
-                        <p className="font-inter text-xs tracking-[0.2em] uppercase text-gold mb-2">Monthly Saving</p>
+                        <p className="font-inter text-xs tracking-[0.15em] uppercase text-gold mb-2">Monthly Saving</p>
                         <div className="font-playfair text-4xl md:text-5xl font-semibold text-white mt-2">
                           {refResult.monthlySaving > 0 ? formatCurrency(refResult.monthlySaving) : "$0"}
                         </div>
@@ -568,8 +568,8 @@ export default function CalculatorsPageContent() {
                   ) : (
                     <div className="h-full bg-marble-100 border border-dashed border-marble-300 flex flex-col items-center justify-center py-20 text-center">
                       <RefreshCw size={40} className="text-gold/30 mb-4" />
-                      <p className="font-playfair text-lg text-charcoal/30 italic mb-1">Your savings will appear here</p>
-                      <p className="font-inter text-xs text-charcoal/20">Enter your current and new loan details</p>
+                      <p className="font-playfair text-lg text-charcoal/70 mb-1">Your savings will appear here</p>
+                      <p className="font-inter text-xs text-charcoal/50">Enter your current and new loan details</p>
                     </div>
                   )}
                 </div>
