@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import Link from "next/link";
 import PageHero from "@/components/PageHero";
 import { submitToSheet } from "@/lib/submitToSheet";
 import {
@@ -299,7 +300,16 @@ export default function ContactPageContent() {
                     </button>
 
                     <p className="font-inter text-xs text-charcoal/40 text-center">
-                      By submitting, you agree to our Privacy Policy. We'll
+                      By submitting, you agree to our{" "}
+                      <Link
+                        href="/privacy-policy"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-gold hover:underline"
+                      >
+                        Privacy Policy
+                      </Link>
+                      . We'll
                       never share your details.
                     </p>
                   </form>

@@ -778,7 +778,12 @@ export default function ReferrerProgramContent() {
                         </div>
                         <span className="font-inter text-sm text-charcoal/60">
                           I agree to the{" "}
-                          <Link href="#" className="text-gold hover:underline">
+                          <Link
+                            href="/terms#refer-and-earn"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-gold hover:underline"
+                          >
                             Refer &amp; Earn Terms &amp; Conditions
                           </Link>{" "}
                           and understand the commission structure.{" "}
@@ -810,7 +815,16 @@ export default function ReferrerProgramContent() {
                     </button>
 
                     <p className="font-inter text-xs text-charcoal/40 text-center">
-                      By submitting, you agree to our Privacy Policy. Your
+                      By submitting, you agree to our{" "}
+                      <Link
+                        href="/privacy-policy"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-gold hover:underline"
+                      >
+                        Privacy Policy
+                      </Link>
+                      . Your
                       information is kept confidential.
                     </p>
                   </form>
