@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { sharedOpenGraph } from "@/lib/seo";
 import PrivacyPolicyContent from "./PrivacyPolicyContent";
 
 export const metadata: Metadata = {
@@ -9,6 +10,7 @@ export const metadata: Metadata = {
     canonical: "https://basetfinance.com.au/privacy-policy",
   },
   openGraph: {
+    ...sharedOpenGraph,
     title: "Privacy Policy — Baset Finance",
     description:
       "How Baset Finance collects, uses, stores, discloses and protects personal information.",

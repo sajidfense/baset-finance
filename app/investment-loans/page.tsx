@@ -1,14 +1,16 @@
 import type { Metadata } from "next";
+import { sharedOpenGraph } from "@/lib/seo";
 import InvestmentLoansContent from "./InvestmentLoansContent";
 
 export const metadata: Metadata = {
-  title: "Investment Property Loans Brisbane — Portfolio Lending & Strategy",
+  title: "Investment Property Loans Brisbane",
   description:
-    "Grow your property portfolio with smart investment financing from Baset Finance. Expert Brisbane mortgage broker advice on investment loans, interest-only strategies, equity leverage, and SMSF lending.",
+    "Grow your property portfolio with expert Brisbane mortgage broker advice on investment loans, interest-only strategies, equity and SMSF lending.",
   alternates: {
     canonical: "https://basetfinance.com.au/investment-loans",
   },
   openGraph: {
+    ...sharedOpenGraph,
     title: "Investment Property Loans Brisbane — Baset Finance",
     description:
       "Grow your property portfolio with expert investment lending from a trusted Brisbane mortgage broker.",

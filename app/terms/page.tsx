@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { sharedOpenGraph } from "@/lib/seo";
 import TermsContent from "./TermsContent";
 
 export const metadata: Metadata = {
@@ -9,6 +10,7 @@ export const metadata: Metadata = {
     canonical: "https://basetfinance.com.au/terms",
   },
   openGraph: {
+    ...sharedOpenGraph,
     title: "Terms & Conditions — Baset Finance",
     description: "The terms that govern use of the Baset Finance website, services and Refer & Earn program.",
     url: "https://basetfinance.com.au/terms",

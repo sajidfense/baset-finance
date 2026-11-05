@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { sharedOpenGraph } from "@/lib/seo";
 import HeroSection from "@/components/home/HeroSection";
 import TrustSection from "@/components/home/TrustSection";
 import ServicesSection from "@/components/home/ServicesSection";
@@ -9,13 +10,14 @@ import LenderLogos from "@/components/home/LenderLogos";
 import CTABanner from "@/components/CTABanner";
 
 export const metadata: Metadata = {
-  title: "Brisbane Mortgage Broker | Home Loans & Refinancing — Baset Finance",
+  title: "Brisbane Mortgage Broker & Home Loans | Baset Finance",
   description:
-    "Baset Finance is a trusted Brisbane mortgage broker offering home loans, refinancing, investment lending, and first home buyer support. Compare 40+ lenders with a free consultation. Serving Brisbane, Gold Coast & Australia wide.",
+    "Trusted Brisbane mortgage broker for home loans, refinancing, investment and first home buyers. Compare 40+ lenders with a free consultation.",
   alternates: {
     canonical: "https://basetfinance.com.au",
   },
   openGraph: {
+    ...sharedOpenGraph,
     title: "Brisbane Mortgage Broker | Home Loans & Refinancing — Baset Finance",
     description:
       "Trusted Brisbane mortgage broker helping Australians secure smarter home loans. Compare 40+ lenders with free, transparent advice.",

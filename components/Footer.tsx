@@ -50,9 +50,9 @@ export default function Footer() {
 
           {/* Services */}
           <nav aria-label="Services navigation">
-            <h4 className="font-playfair text-white font-semibold mb-5 text-sm tracking-widest uppercase">
+            <h3 className="font-playfair text-white font-semibold mb-5 text-sm tracking-widest uppercase">
               Services
-            </h4>
+            </h3>
             <div className="w-8 h-px bg-gold mb-5" />
             <ul className="space-y-3">
               {[
@@ -77,9 +77,9 @@ export default function Footer() {
 
           {/* Quick Links */}
           <nav aria-label="Quick links navigation">
-            <h4 className="font-playfair text-white font-semibold mb-5 text-sm tracking-widest uppercase">
+            <h3 className="font-playfair text-white font-semibold mb-5 text-sm tracking-widest uppercase">
               Quick Links
-            </h4>
+            </h3>
             <div className="w-8 h-px bg-gold mb-5" />
             <ul className="space-y-3">
               {[
@@ -104,9 +104,9 @@ export default function Footer() {
 
           {/* Contact */}
           <div>
-            <h4 className="font-playfair text-white font-semibold mb-5 text-sm tracking-widest uppercase">
+            <h3 className="font-playfair text-white font-semibold mb-5 text-sm tracking-widest uppercase">
               Contact
-            </h4>
+            </h3>
             <div className="w-8 h-px bg-gold mb-5" />
             <address className="not-italic">
               <ul className="space-y-4">

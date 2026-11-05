@@ -3,6 +3,8 @@ import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import MetaPixel from "@/components/MetaPixel";
+import { sharedOpenGraph } from "@/lib/seo";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -21,22 +23,10 @@ const playfair = Playfair_Display({
 export const metadata: Metadata = {
   title: {
     default: "Baset Finance | Brisbane Mortgage Broker — Home Loans For The People",
-    template: "%s | Baset Finance — Brisbane Mortgage Broker",
+    template: "%s | Baset Finance",
   },
   description:
     "Baset Finance is a trusted Brisbane mortgage broker helping Australians secure smarter home loans. Compare 40+ lenders, get free consultations, and enjoy transparent advice. Serving Brisbane, Gold Coast, and Australia wide.",
-  keywords: [
-    "mortgage broker Brisbane",
-    "Brisbane mortgage broker",
-    "home loans Brisbane",
-    "refinancing Brisbane",
-    "first home buyer Brisbane",
-    "investment loans Brisbane",
-    "borrowing capacity calculator",
-    "loan repayment calculator",
-    "Australian mortgage broker",
-    "Baset Finance",
-  ],
   authors: [{ name: "Baset Finance" }],
   creator: "Baset Finance",
   publisher: "Baset Finance",
@@ -49,21 +39,11 @@ export const metadata: Metadata = {
     apple: "/apple-touch-icon.png",
   },
   openGraph: {
-    type: "website",
-    locale: "en_AU",
+    ...sharedOpenGraph,
     url: "https://basetfinance.com.au",
-    siteName: "Baset Finance",
     title: "Baset Finance | Brisbane Mortgage Broker — Home Loans For The People",
     description:
       "Trusted Brisbane mortgage broker helping Australians secure smarter home loans. Compare 40+ lenders with free, transparent advice.",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Baset Finance — Brisbane Mortgage Broker",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
@@ -95,7 +75,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
+    <html lang="en-AU" className={`${inter.variable} ${playfair.variable}`}>
       <head>
         {/* Organization Schema */}
         <script
@@ -106,7 +86,7 @@ export default function RootLayout({
               "@type": "Organization",
               name: "Baset Finance",
               url: "https://basetfinance.com.au",
-              logo: "https://basetfinance.com.au/logo2.PNG",
+              logo: "https://basetfinance.com.au/logo-512.png",
               description:
                 "Trusted Brisbane mortgage broker helping Australians secure smarter home loans with transparent advice and access to 40+ lenders.",
               telephone: "+61420601553",
@@ -140,8 +120,8 @@ export default function RootLayout({
               description:
                 "Brisbane mortgage broker offering home loans, refinancing, investment lending, and first home buyer support. Free consultations and access to 40+ lenders.",
               url: "https://basetfinance.com.au",
-              logo: "https://basetfinance.com.au/logo2.PNG",
-              image: "https://basetfinance.com.au/logo2.PNG",
+              logo: "https://basetfinance.com.au/logo-512.png",
+              image: "https://basetfinance.com.au/logo-512.png",
               telephone: "+61420601553",
               email: "baset@basetfinance.com.au",
               address: {
@@ -253,6 +233,7 @@ export default function RootLayout({
         <Navbar />
         <main className="min-h-screen">{children}</main>
         <Footer />
+        <MetaPixel />
       </body>
     </html>
   );
