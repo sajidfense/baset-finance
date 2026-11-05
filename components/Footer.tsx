@@ -164,6 +164,26 @@ export default function Footer() {
               ))}
             </div>
           </div>
+
+          <div className="mt-4 pt-4 border-t border-white/5 flex justify-center md:justify-end">
+            <a
+              href="https://www.snjprojects.com/"
+              target="_blank"
+              rel="noopener"
+              aria-label="Website by SNJ Projects"
+              className="group flex items-center gap-2 text-white/40 text-xs font-inter hover:text-gold transition-colors"
+            >
+              Website by
+              <Image
+                src="/snj-projects-logo-white.svg"
+                alt=""
+                width={122}
+                height={24}
+                unoptimized
+                className="opacity-70 group-hover:opacity-100 transition-opacity"
+              />
+            </a>
+          </div>
         </div>
       </div>
     </footer>
