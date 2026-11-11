@@ -164,17 +164,6 @@ export default function Footer() {
               ))}
             </div>
           </div>
-
-          <div className="mt-4 pt-4 border-t border-white/5 flex justify-center md:justify-end">
-            <a
-              href="https://www.snjprojects.com/"
-              target="_blank"
-              rel="noopener"
-              className="text-white/40 text-xs font-inter hover:text-gold transition-colors"
-            >
-              Website by SNJ Projects
-            </a>
-          </div>
         </div>
       </div>
     </footer>
