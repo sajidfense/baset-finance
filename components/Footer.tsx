@@ -170,18 +170,9 @@ export default function Footer() {
               href="https://www.snjprojects.com/"
               target="_blank"
               rel="noopener"
-              aria-label="Website by SNJ Projects"
-              className="group flex items-center gap-2 text-white/40 text-xs font-inter hover:text-gold transition-colors"
+              className="text-white/40 text-xs font-inter hover:text-gold transition-colors"
             >
-              Website by
-              <Image
-                src="/snj-projects-logo-white.svg"
-                alt=""
-                width={122}
-                height={24}
-                unoptimized
-                className="opacity-70 group-hover:opacity-100 transition-opacity"
-              />
+              Website by SNJ Projects
             </a>
           </div>
         </div>
